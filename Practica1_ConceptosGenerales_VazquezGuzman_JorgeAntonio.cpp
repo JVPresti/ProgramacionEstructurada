@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 #define PI 3.14159268
 
 int main(){
@@ -57,6 +58,7 @@ do{
 
 
     while(op==2){
+        srand(time(NULL));
         good= rand() % 101 + 1;
         
         printf("Adivina el numero del 1 al 100: ");
