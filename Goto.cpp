@@ -1,7 +1,15 @@
+/*
+Practica3_JuegoGoTo.cpp
+Jorge Antonio Vazquez Guzman
+10 de septiembre  de 2023
+Este archivo contiene el codigo del juego de adivinanza
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
+// Funcion main hace todo, contiene ciclos y etiquetas que direccionan, no recibe nada
 int main(){
     int adi, ran, c, op;
     c=0;
