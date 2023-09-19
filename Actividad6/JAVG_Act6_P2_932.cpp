@@ -138,7 +138,7 @@ void tabmul()
         system("cls");
         for (j = 1; j < 11; j++)
         {
-            printf("%d * %d = %d", i, j, i * j);
+            printf("\n%d * %d = %d", i, j, i * j);
         }
         printf("\n Ingrese una tecla para continuar...");
         getch();
@@ -149,6 +149,7 @@ void tabmul()
 void numrang()
 {
     int min, max, n, i, sum, num;
+    sum=0;
 
     system("CLS");
     printf("\nIngrese el valor minimo del rango: ");
