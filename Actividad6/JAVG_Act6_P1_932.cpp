@@ -84,7 +84,7 @@ void forfibo()
 
     ant = -1;
     sig = 1;
-    for (i = 0; i <= n - 2; i++)//Ciclo para fibonacci
+    for (i = 0; i <= n-1; i++)//Ciclo para fibonacci
     {
         res = ant + sig;
         printf(" %d,", res);
