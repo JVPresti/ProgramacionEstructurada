@@ -4,6 +4,7 @@
 // JAVG_Act6_P1_932
 #include <stdio.h>
 
+//Declaracion de los protipos de las funciones
 void menu(void);
 void forfibo(void);
 void forfacto(void);
@@ -15,6 +16,7 @@ void dofibo(void);
 void dofacto(void);
 void docantdig(void);
 
+//Funcion main que manda a llamar al menu y retorna 0
 int main()
 {
     menu();
@@ -22,6 +24,7 @@ int main()
     return 0;
 }
 
+//Funcion que muestra un menu y llama a una fucnion segun la seleccion del usuario
 void menu()
 {
     int op;
@@ -71,6 +74,7 @@ void menu()
     }
 }
 
+//Funcion que hace Fibonacci con ciclo for
 void forfibo()
 {
     int n, ant, sig, res, i;
@@ -80,7 +84,7 @@ void forfibo()
 
     ant = -1;
     sig = 1;
-    for (i = 0; i <= n - 2; i++)
+    for (i = 0; i <= n - 2; i++)//Ciclo para fibonacci
     {
         res = ant + sig;
         printf(" %d,", res);
@@ -89,6 +93,7 @@ void forfibo()
     }
 }
 
+//Funcion que hace Fibonacci con ciclo while
 void whifibo()
 {
     int n, ant, sig, res, i;
@@ -99,7 +104,7 @@ void whifibo()
     ant = -1;
     sig = 1;
     i = 0;
-    while (i <= n - 2)
+    while (i <= n - 2) //Condicion del ciclo
     {
         res = ant + sig;
         printf(" %d,", res);
@@ -109,6 +114,7 @@ void whifibo()
     }
 }
 
+//Funcion que hace Fibonacci con ciclo do while
 void dofibo()
 {
     int n, ant, sig, res, i;
@@ -127,9 +133,10 @@ void dofibo()
         ant = sig;
         sig = res;
         i++;
-    } while (i <= n);
+    } while (i <= n); //Condicion para el ciclo
 }
 
+//Funcion que hace el factorial con ciclo for
 void forfacto()
 {
     int n, i, res;
@@ -138,13 +145,14 @@ void forfacto()
     scanf("%d", &n);
 
     res = n;
-    for (i = n - 1; i > 0; i--)
+    for (i = n - 1; i > 0; i--)//Condicion para el ciclo del factorial
     {
         res *= i;
     }
     printf("\nEl resultado es %d", res);
 }
 
+//Funcion que hace el factorial con ciclo while
 void whifacto()
 {
     int i, n, res;
@@ -162,6 +170,7 @@ void whifacto()
     printf("\n El resultado es %d ", res);
 }
 
+//Funcion que hace el factorial con ciclo do while
 void dofacto()
 {
     int i, n, res;
@@ -173,12 +182,13 @@ void dofacto()
     i = n - 1;
     do
     {
-        res *= i;
+        res *= i; //Multiplicaciones que hace el factorial
         i--;
     } while (i > 0);
     printf("\n El resultado es %d", res);
 }
 
+//Funcion que cuenta digitos con ciclo for
 void forcantdig()
 {
     int n, x, i;
@@ -187,13 +197,14 @@ void forcantdig()
     scanf("%d", &n);
 
     x = 1;
-    for (i = 0; n > x; i++)
+    for (i = 0; n > x; i++) //Condicion para contar
     {
         x = x * 10;
     }
     printf("El numero tiene un total de %d digitos", i);
 }
 
+//Funcion que cuenta digitos con ciclo while
 void whicantdig()
 {
     int n, x, i;
@@ -203,7 +214,7 @@ void whicantdig()
 
     x = 1;
     i = 0;
-    while (n > x)
+    while (n > x)//Con esta condicion para
     {
         x *= 10;
         i++;
@@ -211,6 +222,7 @@ void whicantdig()
     printf("El numero tiene un total de %d digitos", i);
 }
 
+//Funcion que cuenta digitos con ciclo do while
 void docantdig()
 {
     int n, x, i;
@@ -222,7 +234,7 @@ void docantdig()
     i = 0;
     do
     {
-        x *= 10;
+        x *= 10; //Esto encuentra los digitos
         i++;
     } while (n > x);
     printf("El numero tiene un total de %d digitos", i);
