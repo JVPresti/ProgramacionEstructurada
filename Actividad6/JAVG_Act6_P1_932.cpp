@@ -104,7 +104,7 @@ void whifibo()
     ant = -1;
     sig = 1;
     i = 0;
-    while (i <= n - 2) //Condicion del ciclo
+    while (i <= n - 1) //Condicion del ciclo
     {
         res = ant + sig;
         printf(" %d,", res);
