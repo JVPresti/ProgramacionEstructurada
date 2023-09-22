@@ -153,4 +153,9 @@ void sali7(char cadena[]){
         cadena[i]='\0';
         printf("\n%s", cadena);
     } 
+    printf("%d", i);//quitar esta linea
 }
+
+
+
+//Tengo que terminar este codigo
