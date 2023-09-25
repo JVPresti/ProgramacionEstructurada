@@ -1,6 +1,6 @@
 // Jorge Antono Vazquez Guzman 372504
 // 19 de septiembre de 2023
-// Esqueleto de actividad 6 parte 2
+// Esqueleto de actividad 7 parte 1
 // JAVG_Act7_P1_932
 #include <stdio.h>
 #include <stdlib.h>
