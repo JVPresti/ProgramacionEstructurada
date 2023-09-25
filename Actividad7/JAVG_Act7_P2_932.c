@@ -1,11 +1,12 @@
 // Jorge Antono Vazquez Guzman 372504
-// 19 de septiembre de 2023
-// Esqueleto de actividad 7 parte 1
+// 24 de septiembre de 2023
+// Esqueleto de actividad 7 parte 2
 // JAVG_Act7_P1_932
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+// Declaracion de los prototipos
 void menu();
 void convmayus(char cadena[]);
 void convminus(char cadena[]);
@@ -17,6 +18,7 @@ void caracteres(char cadena[]);
 void todo(char cadena[]);
 void palindromo(char cadena[]);
 
+// Funcion main
 int main()
 {
     menu();
@@ -24,6 +26,7 @@ int main()
     return 0;
 }
 
+// Esta funcion le da a escoger al usuario que opcion realizar
 void menu()
 {
     int op;
@@ -176,7 +179,7 @@ void reversa(char cadena[])
     }
 }
 
-//Esta funcion cuando es llamada imprime la cadena sin espacios
+// Esta funcion cuando es llamada imprime la cadena sin espacios
 void sinespacios(char cadena[])
 {
     int i, j;
@@ -193,18 +196,18 @@ void sinespacios(char cadena[])
     }
 }
 
-//Esta funcion cuando es llamada solo imprime de la cadena los caracteres alfabeticos y espacios
+// Esta funcion cuando es llamada solo imprime de la cadena los caracteres alfabeticos y espacios
 void caracteres(char cadena[])
 {
     int i, j;
     char cadena2[30];
 
-    j=0;
+    j = 0;
     for (i = 0; cadena[i] != '\0'; i++)
     {
-        if ((cadena[i] == ' ') || (cadena[i] >= 'a' && cadena[i] <= 'z') || (cadena[i] >= 'A' && cadena[i] <= 'Z')) //Esta condicion valida que sea alfabetico o espacios
+        if ((cadena[i] == ' ') || (cadena[i] >= 'a' && cadena[i] <= 'z') || (cadena[i] >= 'A' && cadena[i] <= 'Z')) // Esta condicion valida que sea alfabetico o espacios
         {
-            if (cadena[i] != ' ' || (i > 0 && cadena[i + 1] != '\0' && cadena[i - 1] != ' '))//Esto verifica el doble espaciado asi como el inicio y fin con el mismo
+            if (cadena[i] != ' ' || (i > 0 && cadena[i + 1] != '\0' && cadena[i - 1] != ' ')) // Esto verifica el doble espaciado asi como el inicio y fin con el mismo
             {
                 cadena2[j] = cadena[i];
                 printf("%c", cadena2[j]);
@@ -214,10 +217,10 @@ void caracteres(char cadena[])
     }
 }
 
-//Esta funcion cuando es llamada llama a funciones previas para hacer todo lo que ellas hacen
+// Esta funcion cuando es llamada llama a funciones previas para hacer todo lo que ellas hacen
 void todo(char cadena[])
 {
-    //Aqui comienza a llamar a otras funciones
+    // Aqui comienza a llamar a otras funciones
     printf("\nLa cadena en mayusculas: \n");
     convmayus(cadena);
     printf("\nLa cadena en minusculas: \n");
@@ -230,25 +233,25 @@ void todo(char cadena[])
     reversa(cadena);
 }
 
-//Esta funcion cuando es llamada revisa si la cadena es un palindromo
+// Esta funcion cuando es llamada revisa si la cadena es un palindromo
 void palindromo(char cadena[])
 {
     int i, inicio, final, largo;
     char caracter;
     char cadena2[30];
-    inicio= 0;
-    largo=0;
+    inicio = 0;
+    largo = 0;
 
-    for (i = 0; cadena[i] != '\0'; i++)// Crea una copia de la cadena original para pruebas
+    for (i = 0; cadena[i] != '\0'; i++) // Crea una copia de la cadena original para pruebas
     {
         caracter = cadena[i];
 
-        if (caracter >= 'a' && caracter <= 'z')//Convierte de minusculas a mayusculas
+        if (caracter >= 'a' && caracter <= 'z') // Convierte de minusculas a mayusculas
         {
-            caracter -= 32; 
+            caracter -= 32;
         }
 
-        if (caracter != ' ')//Valda si es un espacio o no
+        if (caracter != ' ') // Valda si es un espacio o no
         {
             cadena2[largo] = caracter;
             largo++;
@@ -256,7 +259,7 @@ void palindromo(char cadena[])
     }
     final = largo - 1;
 
-    while (inicio < final)//Esto valida el palindromo
+    while (inicio < final) // Esto valida el palindromo
     {
         if (cadena2[inicio] != cadena2[final])
         {
