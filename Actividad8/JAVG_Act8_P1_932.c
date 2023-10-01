@@ -7,24 +7,27 @@
 #include <time.h>
 
 void menu(void);
-int vectorman(int vector1[]);
-int vectorrand(int vector2[]);
-int vector1y2(int vector3[]);
-int imprimir(int vector1[], int vector2[], int vector3[]);
+int vectorman(int vector1[], int size);
+int vectorrand(int vector2[], int size);
+int vector1y2(int vector1[], int vector2[], int vector3[], int size);
+int imprimir(int vector[], int size);
 void matriz4(void);
 void imprimirmat(void);
 
-int main(){
+int main()
+{
     srand(time(NULL));
     menu();
 
     return 0;
 }
 
-void menu(){
-    int op, c=0, vector1[10], vector2[10], vector3[20];
+void menu()
+{
+    int op, c = 0, vector1[10], vector2[10], vector3[20];
 
-    do{
+    do
+    {
         system("CLS");
         c++;
         printf("\t MENU \n");
@@ -36,110 +39,133 @@ void menu(){
         printf("6. Imprimir matriz 4x4.\n");
         printf("0. Salir.\n");
         scanf("%d", &op);
-        
-        switch(op){
-            case 1:
-                vectorman(vector1);
+
+        switch (op)
+        {
+        case 1:
+            vectorman(vector1, 10);
             break;
-            case 2:
-                vectorrand(vector2);
+        case 2:
+            vectorrand(vector2, 10);
             break;
-            case 3:
-                vector1y2(vector3);
+        case 3:
+            vector1y2(vector1, vector2, vector3, 10);
             break;
-            case 4:
-                imprimir();
+        case 4:
+            imprimir(vector1, 10);
+            imprimir(vector2, 10);
+            imprimir(vector3, 20);
             break;
-            case 5:
-                matriz4();
+        case 5:
+            matriz4();
             break;
-            case 6: 
-                imprimirmat();
+        case 6:
+            imprimirmat();
             break;
-            case 0:
-                printf("Repetiste el menu un total de %d veces. Fue un placer...\n", c);
+        case 0:
+            printf("Repetiste el menu un total de %d veces. Fue un placer...\n", c);
             break;
-            default:
-                printf("Opcion no valida\n");
+        default:
+            printf("Opcion no valida\n");
             break;
-        system("CLS");
-        printf("\n Deseas repetir el menu?\n 1. Si\n 0. No\n");
-        scanf("%d", &op);
+            system("CLS");
+            printf("\n Deseas repetir el menu?\n 1. Si\n 0. No\n");
+            scanf("%d", &op);
         }
-    }while(op!=0);
+    } while (op != 0);
 }
 
-int vectorman(int vector1[10]){
-    int i, val;
+int vectorman(int vector1[], int size)
+{
+    int i, val, sal;
 
-    for(i=0; i<10; i++){
-        valido: //QUITAR LAS ETIQUETAS
-        printf("Ingrese un valor entre el 30 y el 70: ");
-        scanf("%d", &val);
-        if(val>=30 && val<=70){
-            vector1[i]=val;
-        }
-        else{
-            printf("Ingrese un valor valido\n");
-            goto valido; //QUITAR ETIQUETAS
-        }
-    }
-}
-
-int vectorrand(int vector2[10]){
-    int i, n, j;
-
-    for(i=0; i<10;i++){
-        intentar:
-        n=rand() % 20 + 1;
-        for(j=0; j<i; j++){
-            if(n==vector2[j]){
-                goto intentar;
+    for (i = 0; i < size; i++)
+    {
+        sal = 1;
+        do
+        {
+            printf("Ingrese un valor entre el 30 y el 70: ");
+            scanf("%d", &val);
+            if (val >= 30 && val <= 70)
+            {
+                vector1[i] = val;
+                sal = 1;
             }
-        }
-        vector2[i]=n;
+            else
+            {
+                printf("Ingrese un valor valido\n");
+                system("pause");
+                sal = 0;
+            }
+        } while (sal != 1);
     }
+    return 0;
 }
 
-int vector1y2(int vector3[20]){
-    int vector1[10], vector2[10], i, j;
+int vectorrand(int vector2[], int size)
+{
+    int i, n, j, sal;
 
-    vectorman(vector1);
-    vectorrand(vector2);
-
-    for(i=0; i<10; i++){
-        vector3[i]=vector1[i];
+    for (i = 0; i < size; i++)
+    {
+        sal = 1;
+        do
+        {
+            n = rand() % 20 + 1;
+            for (j = 0; j < i; j++)
+            {
+                if (n == vector2[j])
+                {
+                    sal = 0;
+                }
+            }
+            if (sal == 1)
+            {
+                vector2[i] = n;
+            }
+        } while (sal != 1);
     }
-    for(j=0; j<10; j++){
-        vector3[j+10]= vector2[j];
-    }
+    return 0;
 }
 
-int imprimir(int vector1[10], int vector2[10], int vector3[20]){
+int vector1y2(int vector1[], int vector2[], int vector3[], int size)
+{
+    int i, j;
+
+    for (i = 0; i < size; i++)
+    {
+        vector3[i] = vector1[i];
+    }
+    for (j = 0; j < size; j++)
+    {
+        vector3[j + 10] = vector2[j];
+    }
+    return 0;
+}
+
+int imprimir(int vector[], int size)
+{
     int i;
-    
-    vectorman(vector1);
-    vectorrand(vector2);
-    vector1y2(vector3);
 
-    printf("\n Vectoe 1: \n");
-    for(i=0; i<10; i++){
-        printf("%d\n", vector1[i]);
+    printf("\n Vector: \n");
+    for (i = 0; i < size; i++)
+    {
+        printf("%d\n", vector[i]);
     }
-    printf("\n Vector 2: \n");
-    for(i=0; i<10; i++){
-        printf("%d\n", vector2[i]);
-    }
-    printf("\n Vector 3: \n");
-    for(i=0; i<20; i++){
-        printf("%d\n", vector3[i]);
-    }
+    return 0;
 }
 
 void matriz4(){
+
+
+
+
     
-
-
 }
+
+
+
+
+
 
 
