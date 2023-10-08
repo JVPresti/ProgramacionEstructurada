@@ -1,11 +1,14 @@
-/*
-Eres como una libreria, porque te necesito para que todo en mi funcione
-*/
+//Jorge Antono Vazquez Guzman 372504
+//Libreria procesos
+//JAVG_Act9_932
+//Eres como una libreria, porque te necesito para que todo en mi funcione
+
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
+//Declaracion de los prototipos de las funciones de la libreria
 void numrand(int n, int ri, int rf);
 int busq_seq(int vect[], int n, int num);
 void fillnorep(int vect[], int n, int ri, int rf);
@@ -32,8 +35,8 @@ int validar(char msg[], int ri, int rf)
         printf("%s", msg);
         fflush(stdin);
         gets(cadena);
-        op = atoi(cadena);
-    } while (op < ri || op > rf);
+        op = atoi(cadena); //Convierte la cadena a un numero
+    } while (op < ri || op > rf); //Valida que este dentro de los rangos
 
     return op;
 }
@@ -48,7 +51,7 @@ void ordenar(int vect[], int n)
         {
             if (vect[j] <= vect[i])
             {
-                aux = vect[i];
+                aux = vect[i]; //Metodo de burbuja
                 vect[i] = vect[j];
                 vect[j] = aux;
             }
@@ -123,7 +126,7 @@ void fillnorep(int vect[], int n, int ri, int rf)
         do
         {
             num = (rand() % rango) + ri;
-        } while (busq_seq(vect, i, num) != -1);
+        } while (busq_seq(vect, i, num) != -1); //Llama a la otra funcion para confirmar que no se encuentra
 
         vect[i] = num;
     }
@@ -136,7 +139,7 @@ void fillmatnorep(int mat[][4], int m, int n, int ri, int rf)
     largo = m * n;
 
     int vect[largo];
-    fillnorep(vect, largo, ri, rf);
+    fillnorep(vect, largo, ri, rf);//Llena el vector para despues llenar la matriz
 
     for (i = 0, cont = 0; i < 4; i++)
     {
