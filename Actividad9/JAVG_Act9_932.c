@@ -3,12 +3,7 @@
 #include "cosas.h"
 
 void menu();
-void fillvect(int vect[], int n, int ri, int rf);
-void fillmat(int mat[][4], int n, int ri, int rf);
-void printvect(int vect[], int n);
-void printmat(int mat[][4], int n);
-void ordvect(int vect[], int n);
-void buscarvect(int vect[], int n, int num);
+void buscar(int vect[]);
 
 int main(){
     menu();
@@ -16,8 +11,9 @@ int main(){
 }
 
 void menu(){
-    int op, n, ri, rf, vect[15], mat[4][4], num;
+    int op, vect[15], mat[4][4];
 
+    do{
     printf("\t MENU\n");
     printf("1. Llenar vector \n");
     printf("2. Llenar matriz \n");
@@ -27,25 +23,25 @@ void menu(){
     printf("6. Buscar valor en vector \n");
     printf("0. Salir\n");
     op= validar("Ingrese la opcion que desee: ", 0, 6);
-    do{
+    
     switch(op){
         case 1:
-            fillvect(vect, n, ri, rf);
+            fillnorep(vect, 15, 100, 200);
         break;
         case 2:
-            fillmat(mat[][4], 4, ri, rf);
+            fillmatnorep(mat, 4, 4, 1, 16);
         break;
         case 3:
             printvect(vect, 15);
         break;
         case 4:
-            printmat(mat[][4], 4);
+            printmat(mat, 4, 4);
         break;
         case 5:
-            ordvect(vect, 15);
+            ordenar(vect, 15);
         break;
         case 6:
-            buscarvect(vect, 15, num);
+            buscar(vect);
         break;
         case 0:
             printf("\nHasta luego...");
@@ -58,8 +54,18 @@ void menu(){
     }while(op!=0);
 }
 
-void fillvector(int vect[], int n, int ri, int rf){
+void buscar(int vect[]){
+    int n, i;
+
+    printf("\n Ingrese un numero que desee buscar entre 100 y 200: ");
+    n= validar(" ", 100, 200);
+    i= busq_seq(vect, 15, n);
+
+    if(i!=-1){
+        printf("\n El numero %d se encuentra en la posicion %d ", n, i);
+    }
+    else{
+        printf("\n El numero no se encuentra");
+    }
     
-
 }
-
