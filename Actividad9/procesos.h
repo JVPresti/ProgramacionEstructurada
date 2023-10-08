@@ -21,7 +21,6 @@ void fillmatnorep(int mat[][4], int m, int n, int ri, int rf);
 void printmat(int mat[][4], int m, int n);
 void printvect(int vect[], int n);
 
-
 // Valida la entrada del usuario en un rango de numeros
 int validar(char msg[], int ri, int rf)
 {
@@ -39,15 +38,15 @@ int validar(char msg[], int ri, int rf)
     return op;
 }
 
-// Funcion que ordena el vector de menor a mayor;
+// Funcion que ordena el vector de menor a mayor
 void ordenar(int vect[], int n)
 {
     int i, j, aux;
     for (i = 0; i < n - 1; i++)
     {
-        for (j = i + 1; i < n; j++)
+        for (j = i + 1; j < n; j++)
         {
-            if (vect[j]<= vect[i])
+            if (vect[j] <= vect[i])
             {
                 aux = vect[i];
                 vect[i] = vect[j];
@@ -237,7 +236,7 @@ void convminus(char cadena[])
     }
 }
 
-//Funcion que imprime la matriz
+// Funcion que imprime la matriz
 void printmat(int mat[][4], int m, int n)
 {
     int i, j;
