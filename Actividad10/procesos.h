@@ -1,28 +1,26 @@
 //Jorge Antono Vazquez Guzman 372504
 //Libreria procesos
 //JAVG_Act9_932
-//Eres como una libreria, porque te necesito para que todo en mi funcione
 
+//Eres como una libreria, porque te necesito para que todo en mi funcione
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
 #include <time.h>
 
 //Declaracion de los prototipos de las funciones de la libreria
-void numrand(int n, int ri, int rf);
 int busq_seq(int vect[], int n, int num);
-void fillnorep(int vect[], int n, int ri, int rf);
 int largo_cadena(char cadena[]);
 void convmayus(char cadena[]);
-void vocal(char cadena[]);
-void consonan(char cadena[]);
 void convminus(char cadena[]);
-int valida(char msg[], int ri, int rf);
+int validar(char msg[], int ri, int rf);
 void ordenar(int vect[], int n);
-int busq_seqmat(int mat[][4], int m, int n, int num);
-void fillmatnorep(int mat[][4], int m, int n, int ri, int rf);
-void printmat(int mat[][4], int m, int n);
-void printvect(int vect[], int n);
+int nrand(int ri, int rf);
+int validarCad(char cadena[]);
+int valiAlfa(char cadena[]);
+int valiEspacios(char cadena[]);
 
 // Valida la entrada del usuario en un rango de numeros
 int validar(char msg[], int ri, int rf)
@@ -39,6 +37,63 @@ int validar(char msg[], int ri, int rf)
     } while (op < ri || op > rf); //Valida que este dentro de los rangos
 
     return op;
+}
+
+//Funcion que valida que no haya caracteres especiales
+int validarCad(char cadena[]){
+    convmayus(cadena);
+
+    if(valiAlfa(cadena)==0){
+        return 0;
+    }
+    if(valiEspacios(cadena)==0){
+        return 0;
+    }
+    return 1;
+}
+
+//Funcionq ue valide que no inicie o termine con especios, ni haya doble espacios
+int valiEspacios(char cadena[]){
+    int i=0;
+
+    if(cadena[0] == ' '){
+        return 0;
+    }
+    if(cadena[largo_cadena(cadena)] == ' '){
+        return 0;
+    }
+
+    while(cadena[i] != '\0'){
+        if(cadena[i]== ' '){
+            if(cadena[i+1] == ' '){
+                return 0;
+            }
+        }
+        i++;
+    }
+
+    return 1;
+}
+
+//Funcion que valida que no haya caracteres no alfabeticos
+int valiAlfa(char cadena[])
+{
+    int i = 0;
+
+    while (cadena[i] != '\0')
+    {
+        if (cadena[i] != ' ')
+        {
+            if (cadena[i] < 'A' || cadena[i] > 'Z')
+            {
+                return 0; 
+            }
+        }
+
+        i++;
+    }
+
+    return 1;
 }
 
 // Funcion que ordena el vector de menor a mayor
@@ -59,29 +114,6 @@ void ordenar(int vect[], int n)
     }
 }
 
-// Funcion que genera n numeros aleatorios y los almacena en un vector, dice la cantidad de pares, impares y la media.
-void numrand(int n, int ri, int rf)
-{
-    int num, i, par, suma, rango;
-
-    rango = (rf - ri) + 1;
-    suma = 0;
-    par = 0;
-    for (i = 0; i < n; i++)
-    {
-        num = (rand() % rango) + ri;
-        printf("%d\n", num);
-        if (num % 2 == 0)
-        {
-            par++;
-        }
-        suma += num;
-    }
-    printf("Cantidad de pares: %d\n", par);
-    printf("Cantidad de impares: %d\n", n - par);
-    printf("Media: %d\n", suma / n);
-}
-
 // Funcion que busca si hay n elemento en el un vector
 int busq_seq(int vect[], int n, int num)
 {
@@ -94,60 +126,6 @@ int busq_seq(int vect[], int n, int num)
         }
     }
     return -1; // regresa esto si es que no hay ninguno igual
-}
-
-// Funcion que busca si hay n elemento en la matriz
-int busq_seqmat(int mat[][4], int m, int n, int num)
-{
-    int i, j;
-
-    for (i = 0; i < m; i++)
-    {
-        for (j = 0; j < n; j++)
-        {
-            if (mat[i][j] == num)
-            {
-                return i; // Retorna la posicion en la que se encuentras
-            }
-        }
-    }
-
-    return -1; // Retorna una posicion invalida si no se encontro
-}
-
-// Esta funcion rellena un vector con numeros aleatorios pero sin repeticion, para esto llama a la funcion busq_seq para saber si ya se encuentra o no
-void fillnorep(int vect[], int n, int ri, int rf)
-{
-    int i, num, rango;
-    rango = rf - ri + 1;
-
-    for (i = 0; i < n; i++)
-    {
-        do
-        {
-            num = (rand() % rango) + ri;
-        } while (busq_seq(vect, i, num) != -1); //Llama a la otra funcion para confirmar que no se encuentra
-
-        vect[i] = num;
-    }
-}
-
-// Esta funcion rellena una matriz con numeros aleatorios sin repeticion
-void fillmatnorep(int mat[][4], int m, int n, int ri, int rf)
-{
-    int i, j, cont, largo;
-    largo = m * n;
-
-    int vect[largo];
-    fillnorep(vect, largo, ri, rf);//Llena el vector para despues llenar la matriz
-
-    for (i = 0, cont = 0; i < 4; i++)
-    {
-        for (j = 0; j < 4; j++, cont++)
-        {
-            mat[i][j] = vect[cont];
-        }
-    }
 }
 
 // Funcion que cuando es llamada cuanta el largo de la cadena
@@ -181,48 +159,6 @@ void convmayus(char cadena[])
     }
 }
 
-// Funcion que cuando es llamada imprime las vocales de la cadena
-void vocal(char cadena[])
-{
-    int i;
-
-    for (i = 0; cadena[i] != '\0'; i++)
-    {
-        char caracter = cadena[i];
-
-        if (caracter >= 'A' && caracter <= 'Z')
-        {
-            caracter += 32;
-        }
-
-        if ((caracter >= 'a' && caracter <= 'z') && (caracter == 'a' || caracter == 'e' || caracter == 'i' || caracter == 'o' || caracter == 'u'))
-        {
-            printf("%c", cadena[i]);
-        }
-    }
-}
-
-// Funcion que cuando es llamada imprime las consonantes de la cadena
-void consonan(char cadena[])
-{
-    int i;
-
-    for (i = 0; cadena[i] != '\0'; i++)
-    {
-        char caracter = cadena[i];
-
-        if (caracter >= 'A' && caracter <= 'Z')
-        {
-            caracter += 32;
-        }
-
-        if ((caracter >= 'a' && caracter <= 'z') && (caracter != 'a' && caracter != 'e' && caracter != 'i' && caracter != 'o' && caracter != 'u'))
-        {
-            printf("%c", cadena[i]);
-        }
-    }
-}
-
 // Esta funcion cuando es llamada convierte la cadena a minusculas
 void convminus(char cadena[])
 {
@@ -239,27 +175,10 @@ void convminus(char cadena[])
     }
 }
 
-// Funcion que imprime la matriz
-void printmat(int mat[][4], int m, int n)
-{
-    int i, j;
-
-    for (i = 0; i < m; i++)
-    {
-        for (j = 0; j < n; j++)
-        {
-            printf("[%2d]", mat[i][j]);
-        }
-        printf("\n");
-    }
+//Esta funcion genera numeros random
+int nrand(int ri, int rf){
+    int rango;
+    rango=(rf-ri+1);
+    return rand() % rango +ri;
 }
 
-void printvect(int vect[], int n)
-{
-    int i;
-
-    for (i = 0; i < n; i++)
-    {
-        printf("%d \n", vect[i]);
-    }
-}
