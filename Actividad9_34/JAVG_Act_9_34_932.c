@@ -9,6 +9,9 @@ void fecha(int day, int month, int year, char sday[], char smonth[], char syear[
 void states(void);
 void meses(void);
 void inicio4(char apPat[], char apMat[], char name[], char name2[], char curp[]);
+void curpFecha(char curp[], char sday[], char smonth[], char syear[]);
+void curpSexo(char curp[], char ssex[]);
+void curpState(char curp[], char sstate[]);
 
 int main()
 {
@@ -48,11 +51,22 @@ void menu()
 void curpmain()
 {
     int sex, day, month, year, state;
-    char curp[18], apPat[30], apMat[30], name[20], name2[20], sday[3], smonth[3], syear[5], ssex[3], sstate[3];
+    char curp[19], apPat[30], apMat[30], name[20], name2[20], sday[3], smonth[3], syear[5], ssex[3], sstate[3];
 
     system("cls");
     genData(name, name2, apPat, apMat, sday, smonth, syear, ssex, sex, state, day, month, year, sstate);
     inicio4(apPat, apMat, name, name2, curp);
+    curpFecha(curp, sday, smonth, syear);
+    curpSexo(curp, ssex);
+    curpState(curp, sstate);
+
+    curp[13] = '\0';
+    system("cls");
+    for (int i = 0; i < 13; i++)
+    {
+        printf("%c", curp[i]);
+    }
+    system("pause");
 }
 
 void genData(char name[], char name2[], char apPat[], char apMat[], char sday[], char smonth[], char syear[], char ssex[], int sex, int state, int day, int month, int year, char sstate[])
@@ -96,8 +110,8 @@ void genData(char name[], char name2[], char apPat[], char apMat[], char sday[],
 
     system("pause");
     states();
-    state = validar("INGRESA TU ESTADO DE NACIMIENTO: ", 1, 32);
-    sstate[0] = state;
+    state = validar("INGRESA TU ESTADO DE NACIMIENTO: ", 1, 33);
+    sstate[1] = state;
 }
 
 void fecha(int day, int month, int year, char sday[], char smonth[], char syear[])
@@ -196,6 +210,7 @@ void states()
     printf("30. Yucatan\n");
     printf("31. Zacatecas\n");
     printf("32. Ciudad de Mexico\n");
+    printf("33. Extranjero\n");
 }
 
 void inicio4(char apPat[], char apMat[], char name[], char name2[], char curp[])
@@ -264,11 +279,11 @@ void inicio4(char apPat[], char apMat[], char name[], char name2[], char curp[])
     }
 
     j = 0;
+    i = 0;
     do
     { // Verifica que las 4 iniciales no este en las palabras inconvenientes
         band = FALSE;
         same = 0;
-        i = 0;
         do
         {
             if (iniciales[i] == pnegadas[j][i])
@@ -285,11 +300,66 @@ void inicio4(char apPat[], char apMat[], char name[], char name2[], char curp[])
         {
             iniciales[1] = 'X';
         }
-        j++;
+        i++;
     } while (band == TRUE && i < 81);
 
     for (i = 0; i < 4; i++)
     {
         curp[i] = iniciales[i];
     }
+}
+
+void curpFecha(char curp[], char sday[], char smonth[], char syear[])
+{
+    int mes, dia;
+    dia = atoi(sday);
+    mes = atoi(smonth);
+
+    curp[4] = syear[2];
+    curp[5] = syear[3];
+
+    if (mes < 10)
+    {
+        curp[6] = '0';
+        curp[7] = smonth[0];
+    }
+    else
+    {
+        curp[6] = smonth[0];
+        curp[7] = smonth[1];
+    }
+
+    if (dia < 10)
+    {
+        curp[8] = '0';
+        curp[9] = sday[0];
+    }
+    else
+    {
+        curp[8] = sday[0];
+        curp[9] = sday[1];
+    }
+}
+
+void curpSexo(char curp[], char ssex[])
+{
+    int sexo = ssex[0];
+
+    if (sexo == 1)
+    {
+        curp[10] = 'H';
+    }
+    else
+    {
+        curp[10] = 'M';
+    }
+}
+
+void curpState(char curp[], char sstate[])
+{
+    int i, estado = sstate[1];
+    char iniEstado[33][3] = {"AS", "BC", "BS", "CC", "CS", "CH", "CL", "CM", "DF", "DG", "GT", "GR", "HG", "JC", "MC", "MN", "MS", "NT", "NL", "OC", "PL", "QT", "QR", "SP", "SL", "SR", "TC", "TS", "TL", "VZ", "YN", "ZS", "NE"};
+    i = estado - 1;
+    curp[11] = iniEstado[i][0];
+    curp[12] = iniEstado[i][0];
 }
