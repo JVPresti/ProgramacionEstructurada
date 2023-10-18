@@ -181,4 +181,3 @@ int nrand(int ri, int rf){
     rango=(rf-ri+1);
     return rand() % rango +ri;
 }
-
