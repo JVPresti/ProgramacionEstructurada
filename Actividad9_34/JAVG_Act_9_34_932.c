@@ -13,9 +13,11 @@ void curpFecha(char curp[], char sday[], char smonth[], char syear[]);
 void curpSexo(char curp[], char ssex[]);
 void curpState(char curp[], char sstate[]);
 void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[]);
+void curpHomonimia(char curp[], char syear[]);
 
 int main()
 {
+    srand(time(NULL));
     menu();
     return 0;
 }
@@ -61,10 +63,10 @@ void curpmain()
     curpSexo(curp, ssex);
     curpState(curp, sstate);
     curpConso(curp, apPat, apMat, name, name2);
+    curpHomonimia(curp, syear);
 
-    curp[16] = '\0';
     system("cls");
-    for (int i = 0; i < 16; i++)
+    for (int i = 0; i < 18; i++)
     {
         printf("%c", curp[i]);
     }
@@ -74,37 +76,46 @@ void curpmain()
 
 void genData(char name[], char name2[], char apPat[], char apMat[], char sday[], char smonth[], char syear[], char ssex[], int sex, int state, int day, int month, int year, char sstate[])
 {
-    printf("APELLIDO PATERNO: ");
-    fflush(stdin);
-    gets(apPat);
-    removeEspacios(apPat);
-    validEnie(apPat);
-    convmayus(apPat);
-
-    system("cls");
-    printf("APELLIDO MATERNO: ");
-    fflush(stdin);
-    gets(apMat);
-    removeEspacios(apMat);
-    validEnie(apMat);
-    convmayus(apMat);
-
-    system("cls");
+    int op;
     do
     {
-        printf("PRIMER NOMBRE: ");
-        fflush(stdin);
-        gets(name);
-        printf("\n SEGUNDO NOMBRE (EN CASO DE TENER): ");
-        fflush(stdin);
-        gets(name2);
-    } while (name[0] == '\0');
+        printf("APELLIDO PATERNO: ");
+    } while (validarCad(apPat) == 1);
+    removeEspacios(apPat);
+    validEnie(apPat);
+
+    system("CLS");
+    op = validar("Tiene apellido materno? \n1. SI \n0. NO\n", 0, 1);
+    while (op == 1)
+    {
+        do
+        {
+            printf("\nAPELLIDO MATERNO: ");
+        } while (validarCad(apMat) == 1);
+        op = 0;
+    }
+    removeEspacios(apMat);
+    validEnie(apMat);
+
+    system("CLS");
+    do
+    {
+        printf("\nPRIMER NOMBRE: ");
+    } while (validarCad(name) == 1);
+
+    op = validar("Tiene mas nombres? \n1. SI \n0. NO\n", 0, 1);
+    while (op == 1)
+    {
+        do
+        {
+            printf("\nDEMAS NOMBRES: ");
+        } while (validarCad(name2) == 1);
+        op = 0;
+    }
     validEnie(name);
     validEnie(name2);
     removeEspacios(name);
     removeEspacios(name2);
-    convmayus(name);
-    convmayus(name2);
 
     system("cls");
     printf("SEXO:\n");
@@ -134,7 +145,7 @@ void fecha(int day, int month, int year, char sday[], char smonth[], char syear[
     printf("FECHA DE NACIMIENTO\n");
     year = validar("AÑO DE NACIMIENTO (CUATRO DIGITOS): ", 1893, 2023);
     system("cls");
-    if (year % 4 == 0)
+    if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
     {
         bi = TRUE;
     }
@@ -418,4 +429,37 @@ void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[
     {
         curp[15] = buscaCons(name2);
     }
+}
+
+void curpHomonimia(char curp[], char syear[])
+{
+    int year, n;
+    char num[10];
+    year = atoi(syear);
+    if (year < 2000)
+    {
+        curp[16] = '0';
+    }
+    else
+    {
+        if (year >= 2000 && year <= 2009)
+        {
+            curp[16] = 'A';
+        }
+        else
+        {
+            if (year >= 2010 && year <= 2019)
+            {
+                curp[16] = 'B';
+            }
+            else
+            {
+                curp[16] = 'C';
+            }
+        }
+    }
+    n = rand() % 9 + 1;
+    itoa(n, num, 10);
+    curp[17] = num[0];
+    curp[18] = '\0';
 }
