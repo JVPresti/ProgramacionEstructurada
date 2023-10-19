@@ -116,6 +116,7 @@ void genData(char name[], char name2[], char apPat[], char apMat[], char sday[],
     validEnie(name2);
     removeEspacios(name);
     removeEspacios(name2);
+    validU(name2);
 
     system("cls");
     printf("SEXO:\n");
@@ -239,7 +240,7 @@ void states()
 
 void inicio4(char apPat[], char apMat[], char name[], char name2[], char curp[])
 {
-    int same, i = 0, j, band = FALSE;
+    int same, i = 0, j, band = FALSE, band2;
     char iniciales[4];
     char pnegadas[81][5] = {"BACA", "BAKA", "BUEI", "BUEY", "CACA", "CACO", "CAGA", "CAGO", "CAKA", "CAKO", "COGE", "COGI", "COJA", "COJE", "COJI", "COJO", "COLA", "CULO", "FALO", "FETO", "GETA", "GUEI", "GUEY", "JETA", "JOTO", "KACA", "KACO", "KAGA", "KAGO", "KAKA", "KAKO", "KOGE", "KOGI", "KOJA", "KOJE", "KOJI", "KOJO", "KOLA", "KULO", "LILO", "LOCA", "LOCO", "LOKA", "LOKO", "MAME", "MAMO", "MEAR", "MEAS", "MEON", "MIAR", "MION", "MOCO", "MOKO", "MULA", "MULO", "NACA", "NACO", "PEDA", "PEDO", "PENE", "PIPI", "PITO", "POPO", "PUTA", "PUTO", "QULO", "RATA", "ROBA", "ROBE", "ROBO", "RUIN", "SENO", "TETA", "VACA", "VAGA", "VAGO", "VAKA", "VUEI", "VUEY", "WUEI", "WUEY"};
     char jose[4] = "JOSE";
@@ -280,6 +281,7 @@ void inicio4(char apPat[], char apMat[], char name[], char name2[], char curp[])
         }
     } while (band == FALSE && i < 4);
 
+    band2=FALSE;
     i = 0;
     do
     {
@@ -289,17 +291,17 @@ void inicio4(char apPat[], char apMat[], char name[], char name2[], char curp[])
         }
         else
         {
-            band = TRUE;
+            band2 = TRUE;
         }
-    } while (band == FALSE && i < 5);
+    } while (band2 == FALSE && i < 5);
 
-    if (band == TRUE)
+    if (band == FALSE || band2 == FALSE)
     {
-        iniciales[3] = name[0];
+        iniciales[3] = name2[0];
     }
     else
     {
-        iniciales[3] = name2[0];
+        iniciales[3] = name[0];
     }
 
     j = 0;
@@ -389,7 +391,7 @@ void curpState(char curp[], char sstate[])
 
 void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[])
 {
-    int band, i = 0;
+    int band, band2, i = 0;
     char jose[4] = "JOSE";
     char maria[5] = "MARIA";
     curp[13] = buscaCons(apPat);
@@ -408,6 +410,7 @@ void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[
         }
     } while (band == FALSE && i < 4);
 
+    band2 = FALSE;
     i = 0;
     do
     {
@@ -417,17 +420,17 @@ void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[
         }
         else
         {
-            band = TRUE;
+            band2 = TRUE;
         }
-    } while (band == FALSE && i < 5);
+    } while (band2 == FALSE && i < 5);
 
-    if (band)
+    if (band == FALSE || band2 == FALSE)
     {
-        curp[15] = buscaCons(name);
+        curp[15] = buscaCons(name2);
     }
     else
     {
-        curp[15] = buscaCons(name2);
+        curp[15] = buscaCons(name);
     }
 }
 

@@ -24,6 +24,7 @@ void removeEspacios(char cad[]);
 void validEnie(char Cad[]);
 char buscavocal(char cad[]);
 char buscaCons(char cad[]);
+void validU(char cad[]);
 
 // Valida la entrada del usuario en un rango de numeros
 int validar(char msg[], int ri, int rf)
@@ -57,6 +58,21 @@ void validEnie(char cad[])
     }
 }
 
+// Cambia la u con dieresis por una U
+void validU(char cad[])
+{
+    int i, n;
+    n = strlen(cad);
+
+    for (i = 0; i < n; i++)
+    {
+        if (cad[i] == 129 || cad[i] == 154 || cad[i] == 233)
+        {
+            cad[i] = 'U';
+        }
+    }
+}
+
 // Funcion que valida que no haya caracteres especiales
 int validarCad(char cadena[])
 {
@@ -82,6 +98,10 @@ int validarCad(char cadena[])
 
         for (i = 0; cadena[i] != '\0'; i++)
         {
+            if (cadena[i] == 129 || cadena[i] == 154 || cadena[i] == 233)
+            {
+                cadena[i] = 'U';
+            }
             if (cadena[i] > 90)
             {
                 if (cadena[i] >= 97)
