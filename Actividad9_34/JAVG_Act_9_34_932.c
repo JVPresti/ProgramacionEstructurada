@@ -152,7 +152,10 @@ void fecha(int day, int month, int year, char sday[], char smonth[], char syear[
     }
 
     meses();
-    month = validar("ELIGE EL NUMERO DE TU MES: ", 1, 12);
+    do
+    {
+        month = validar("ELIGE EL NUMERO DE TU MES: ", 1, 12);
+    } while (year == 2023 && month >= 10);
     system("cls");
     if (month == 2)
     {
@@ -281,7 +284,7 @@ void inicio4(char apPat[], char apMat[], char name[], char name2[], char curp[])
         }
     } while (band == FALSE && i < 4);
 
-    band2=FALSE;
+    band2 = FALSE;
     i = 0;
     do
     {
@@ -466,3 +469,4 @@ void curpHomonimia(char curp[], char syear[])
     curp[17] = num[0];
     curp[18] = '\0';
 }
+// valida que no se creen curps de gente no nacida, mes, dia
