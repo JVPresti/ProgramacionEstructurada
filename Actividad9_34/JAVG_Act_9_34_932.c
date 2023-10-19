@@ -12,6 +12,7 @@ void inicio4(char apPat[], char apMat[], char name[], char name2[], char curp[])
 void curpFecha(char curp[], char sday[], char smonth[], char syear[]);
 void curpSexo(char curp[], char ssex[]);
 void curpState(char curp[], char sstate[]);
+void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[]);
 
 int main()
 {
@@ -29,7 +30,7 @@ void menu()
         printf("\t\nMenu\n");
         printf("1. Curp\n"),
             printf("0. Salir\n");
-        op = validar("Seleccione una opcion", 0, 1);
+        op = validar("Seleccione una opcion: ", 0, 1);
 
         switch (op)
         {
@@ -51,7 +52,7 @@ void menu()
 void curpmain()
 {
     int sex, day, month, year, state;
-    char curp[19], apPat[30], apMat[30], name[20], name2[20], sday[3], smonth[3], syear[5], ssex[3], sstate[3];
+    char curp[19], apPat[30], apMat[30], name[20], name2[20], sday[10], smonth[10], syear[10], ssex[10], sstate[10];
 
     system("cls");
     genData(name, name2, apPat, apMat, sday, smonth, syear, ssex, sex, state, day, month, year, sstate);
@@ -59,13 +60,15 @@ void curpmain()
     curpFecha(curp, sday, smonth, syear);
     curpSexo(curp, ssex);
     curpState(curp, sstate);
+    curpConso(curp, apPat, apMat, name, name2);
 
-    curp[13] = '\0';
+    curp[16] = '\0';
     system("cls");
-    for (int i = 0; i < 13; i++)
+    for (int i = 0; i < 16; i++)
     {
         printf("%c", curp[i]);
     }
+    printf("\n");
     system("pause");
 }
 
@@ -74,6 +77,7 @@ void genData(char name[], char name2[], char apPat[], char apMat[], char sday[],
     printf("APELLIDO PATERNO: ");
     fflush(stdin);
     gets(apPat);
+    removeEspacios(apPat);
     validEnie(apPat);
     convmayus(apPat);
 
@@ -81,6 +85,7 @@ void genData(char name[], char name2[], char apPat[], char apMat[], char sday[],
     printf("APELLIDO MATERNO: ");
     fflush(stdin);
     gets(apMat);
+    removeEspacios(apMat);
     validEnie(apMat);
     convmayus(apMat);
 
@@ -96,22 +101,30 @@ void genData(char name[], char name2[], char apPat[], char apMat[], char sday[],
     } while (name[0] == '\0');
     validEnie(name);
     validEnie(name2);
+    removeEspacios(name);
+    removeEspacios(name2);
     convmayus(name);
     convmayus(name2);
 
     system("cls");
     printf("SEXO:\n");
     printf("1. HOMBRE\n2. MUJER\n");
-    sex = validar("INGRESA TU SEXO: ", 1, 2);
-    itoa(sex, ssex, 3);
+    do
+    {
+        sex = validar("INGRESA TU SEXO: ", 1, 2);
+        itoa(sex, ssex, 10);
+    } while (sex == 0);
 
     system("cls");
     fecha(day, month, year, sday, smonth, syear);
 
     system("pause");
-    states();
-    state = validar("INGRESA TU ESTADO DE NACIMIENTO: ", 1, 33);
-    sstate[1] = state;
+    do
+    {
+        states();
+        state = validar("INGRESA TU ESTADO DE NACIMIENTO: ", 1, 33);
+        itoa(state, sstate, 10);
+    } while (state == 0);
 }
 
 void fecha(int day, int month, int year, char sday[], char smonth[], char syear[])
@@ -152,9 +165,9 @@ void fecha(int day, int month, int year, char sday[], char smonth[], char syear[
         }
     }
 
-    itoa(day, sday, 3);
-    itoa(month, smonth, 3);
-    itoa(year, syear, 5);
+    itoa(day, sday, 10);
+    itoa(month, smonth, 10);
+    itoa(year, syear, 10);
     system("cls");
 }
 
@@ -343,9 +356,7 @@ void curpFecha(char curp[], char sday[], char smonth[], char syear[])
 
 void curpSexo(char curp[], char ssex[])
 {
-    int sexo = ssex[0];
-
-    if (sexo == 1)
+    if (ssex[0] == '1')
     {
         curp[10] = 'H';
     }
@@ -357,9 +368,54 @@ void curpSexo(char curp[], char ssex[])
 
 void curpState(char curp[], char sstate[])
 {
-    int i, estado = sstate[1];
-    char iniEstado[33][3] = {"AS", "BC", "BS", "CC", "CS", "CH", "CL", "CM", "DF", "DG", "GT", "GR", "HG", "JC", "MC", "MN", "MS", "NT", "NL", "OC", "PL", "QT", "QR", "SP", "SL", "SR", "TC", "TS", "TL", "VZ", "YN", "ZS", "NE"};
+    int i, estado;
+    estado = atoi(sstate);
     i = estado - 1;
+    char iniEstado[33][3] = {"AS", "BC", "BS", "CC", "CS", "CH", "CL", "CM", "DF", "DG", "GT", "GR", "HG", "JC", "MC", "MN", "MS", "NT", "NL", "OC", "PL", "QT", "QR", "SP", "SL", "SR", "TC", "TS", "TL", "VZ", "YN", "ZS", "NE"};
     curp[11] = iniEstado[i][0];
-    curp[12] = iniEstado[i][0];
+    curp[12] = iniEstado[i][1];
+}
+
+void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[])
+{
+    int band, i = 0;
+    char jose[4] = "JOSE";
+    char maria[5] = "MARIA";
+    curp[13] = buscaCons(apPat);
+    curp[14] = buscaCons(apMat);
+
+    band = FALSE;
+    do
+    {
+        if (name[i] == jose[i])
+        {
+            i++;
+        }
+        else
+        {
+            band = TRUE;
+        }
+    } while (band == FALSE && i < 4);
+
+    i = 0;
+    do
+    {
+        if (name[i] == maria[i])
+        {
+            i++;
+        }
+        else
+        {
+            band = TRUE;
+        }
+    } while (band == FALSE && i < 5);
+
+    if (band)
+    {
+        curp[15] = buscaCons(name);
+    }
+    else
+    {
+        curp[15] = buscaCons(name2);
+    }
 }

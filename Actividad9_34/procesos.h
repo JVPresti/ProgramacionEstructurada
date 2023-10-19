@@ -1,8 +1,8 @@
-//Jorge Antono Vazquez Guzman 372504
-//Libreria procesos
-//JAVG_Act9_932
+// Jorge Antono Vazquez Guzman 372504
+// Libreria procesos
+// JAVG_Act9_932
 
-//Eres como una libreria, porque te necesito para que todo en mi funcione
+// Eres como una libreria, porque te necesito para que todo en mi funcione
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,9 +10,8 @@
 #include <string.h>
 #include <time.h>
 
-//Declaracion de los prototipos de las funciones de la libreria
+// Declaracion de los prototipos de las funciones de la libreria
 int busq_seq(int vect[], int n, int num);
-int largo_cadena(char cadena[]);
 void convmayus(char cadena[]);
 void convminus(char cadena[]);
 int validar(char msg[], int ri, int rf);
@@ -21,8 +20,10 @@ int nrand(int ri, int rf);
 int validarCad(char cadena[]);
 int valiAlfa(char cadena[]);
 int valiEspacios(char cadena[]);
+void removeEspacios(char cad[]);
 void validEnie(char Cad[]);
 char buscavocal(char cad[]);
+char buscaCons(char cad[]);
 
 // Valida la entrada del usuario en un rango de numeros
 int validar(char msg[], int ri, int rf)
@@ -35,18 +36,20 @@ int validar(char msg[], int ri, int rf)
         printf("%s", msg);
         fflush(stdin);
         gets(cadena);
-        op = atoi(cadena); //Convierte la cadena a un numero
-    } while (op < ri || op > rf); //Valida que este dentro de los rangos
+        op = atoi(cadena);        // Convierte la cadena a un numero
+    } while (op < ri || op > rf); // Valida que este dentro de los rangos
 
     return op;
 }
 
-//Cambia las ñ por una X
-void validEnie(char cad[]){
+// Cambia las ñ por una X
+void validEnie(char cad[])
+{
     int i, n;
-    n=strlen(cad);
+    n = strlen(cad);
 
-    for(i=0; i<n; i++){
+    for (i = 0; i < n; i++)
+    {
         if (cad[i] == -92 || cad[i] == -91)
         {
             cad[i] = 'X';
@@ -54,14 +57,17 @@ void validEnie(char cad[]){
     }
 }
 
-//Funcion que valida que no haya caracteres especiales
-int validarCad(char cadena[]){
+// Funcion que valida que no haya caracteres especiales
+int validarCad(char cadena[])
+{
     convmayus(cadena);
 
-    if(valiAlfa(cadena)==0){
+    if (valiAlfa(cadena) == 0)
+    {
         return 0;
     }
-    if(valiEspacios(cadena)==0){
+    if (valiEspacios(cadena) == 0)
+    {
         return 0;
     }
     return 1;
@@ -90,7 +96,25 @@ int valiEspacios(char cadena[]){
     return 1;
 }
 
-//Funcion que valida que no haya caracteres no alfabeticos
+// Funcion que quita los espacios
+void removeEspacios(char cad[])
+{
+    int i, j;
+    i = 0;
+    j = 0;
+    while (cad[i] != '\0')
+    {
+        if (cad[i] != ' ')
+        {
+            cad[j] = cad[i];
+            j++;
+        }
+        i++;
+    }
+    cad[j] = '\0';
+}
+
+// Funcion que valida que no haya caracteres no alfabeticos
 int valiAlfa(char cadena[])
 {
     int i = 0;
@@ -101,7 +125,7 @@ int valiAlfa(char cadena[])
         {
             if (cadena[i] < 'A' || cadena[i] > 'Z')
             {
-                return 0; 
+                return 0;
             }
         }
 
@@ -121,7 +145,7 @@ void ordenar(int vect[], int n)
         {
             if (vect[j] <= vect[i])
             {
-                aux = vect[i]; //Metodo de burbuja
+                aux = vect[i]; // Metodo de burbuja
                 vect[i] = vect[j];
                 vect[j] = aux;
             }
@@ -190,15 +214,15 @@ void convminus(char cadena[])
     }
 }
 
-//Retorna la primera vocal que encuentra
-char buscavocal (char cad[])
+// Retorna la primera vocal que encuentra
+char buscavocal(char cad[])
 {
     char vocal;
-    int i=1, n;
-    n=strlen(cad);
-    while (i<n)
+    int i = 1, n;
+    n = strlen(cad);
+    while (i < n)
     {
-        if(cad[i]=='A' || cad[i]=='E' || cad[i]=='I' || cad[i]=='O' || cad[i]=='U' || cad[i]=='/' || cad[i]=='-' || cad[i]=='.')
+        if (cad[i] == 'A' || cad[i] == 'E' || cad[i] == 'I' || cad[i] == 'O' || cad[i] == 'U' || cad[i] == '/' || cad[i] == '-' || cad[i] == '.')
         {
             return cad[i];
         }
@@ -207,10 +231,28 @@ char buscavocal (char cad[])
     return 'X';
 }
 
-//Esta funcion genera numeros random
-int nrand(int ri, int rf){
-    int rango;
-    rango=(rf-ri+1);
-    return rand() % rango +ri;
+//Funcion que busca la primera consonante
+char buscaCons(char cad[])
+{
+    char vocal;
+    int n, i;
+    n=strlen(cad);
+    i=1;
+    while (i<n)
+    {
+        if(cad[i]!='A' && cad[i]!='E' && cad[i]!='I' && cad[i]!='O' && cad[i]!='U' && cad[i]!=' ')
+        {
+            return cad[i];
+        }
+        i++;
+    }
+    return 'X';
 }
 
+// Esta funcion genera numeros random
+int nrand(int ri, int rf)
+{
+    int rango;
+    rango = (rf - ri + 1);
+    return rand() % rango + ri;
+}
