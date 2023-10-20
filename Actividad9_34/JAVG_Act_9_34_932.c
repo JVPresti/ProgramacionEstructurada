@@ -4,14 +4,14 @@
 
 void menu(void);
 void curpmain(void);
-void genData(char name[], char name2[], char apPat[], char apMat[], char sday[], char smonth[], char syear[], char ssex[], int sex, int state, int day, int month, int year, char sstate[]);
+void genData(char name[], char name2[], char apPat[], char apMat[], char sday[], char smonth[], char syear[], char ssex[], int sex, int state, int day, int month, int year, char curp[]);
 void fecha(int day, int month, int year, char sday[], char smonth[], char syear[]);
 void states(void);
 void meses(void);
 void inicio4(char apPat[], char apMat[], char name[], char name2[], char curp[]);
 void curpFecha(char curp[], char sday[], char smonth[], char syear[]);
 void curpSexo(char curp[], char ssex[]);
-void curpState(char curp[], char sstate[]);
+void curpState(char curp[], int state);
 void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[]);
 void curpHomonimia(char curp[], char syear[]);
 
@@ -54,14 +54,13 @@ void menu()
 void curpmain()
 {
     int sex, day, month, year, state;
-    char curp[19], apPat[30], apMat[30], name[20], name2[20], sday[10], smonth[10], syear[10], ssex[10], sstate[10];
+    char curp[19], apPat[30], apMat[30], name[20], name2[20], sday[10], smonth[10], syear[10], ssex[10];
 
     system("cls");
-    genData(name, name2, apPat, apMat, sday, smonth, syear, ssex, sex, state, day, month, year, sstate);
+    genData(name, name2, apPat, apMat, sday, smonth, syear, ssex, sex, state, day, month, year, curp);
     inicio4(apPat, apMat, name, name2, curp);
     curpFecha(curp, sday, smonth, syear);
     curpSexo(curp, ssex);
-    curpState(curp, sstate);
     curpConso(curp, apPat, apMat, name, name2);
     curpHomonimia(curp, syear);
 
@@ -74,17 +73,28 @@ void curpmain()
     system("pause");
 }
 
-void genData(char name[], char name2[], char apPat[], char apMat[], char sday[], char smonth[], char syear[], char ssex[], int sex, int state, int day, int month, int year, char sstate[])
+void genData(char name[], char name2[], char apPat[], char apMat[], char sday[], char smonth[], char syear[], char ssex[], int sex, int state, int day, int month, int year, char curp[])
 {
     int op;
-    do
+    char prepos[19][5] = {"DA", "DE", "DI", "DD", "EL", "LA", "LE", "MC", "DAS", "DEL", "DER", "DIE", "LOS", "LAS", "LES", "MAC", "VAN", "VON", "Y"};
+    char prepos2[19][5] = {" DA", " DE", " DI", " DD", " EL", " LA", " LE", " MC", " DAS", " DEL", " DER", " DIE", " LOS", " LAS", " LES", " MAC", " VAN", " VON", " Y"};
+
+    op = validar("Tiene apellido paterno? \n1. SI \n0. NO\n", 0, 1);
+    while (op == 1)
     {
-        printf("APELLIDO PATERNO: ");
-    } while (validarCad(apPat) == 1);
+        do
+        {
+            printf("\nAPELLIDO PATERNO: ");
+        } while (validarCad(apPat) == 1);
+        op = 0;
+    }
+    eliminarPrepo(apPat, prepos);
+    eliminarPrepo(apPat, prepos2);
+    eliminarPrepo(apPat, prepos2);
     removeEspacios(apPat);
     validEnie(apPat);
-
     system("CLS");
+
     op = validar("Tiene apellido materno? \n1. SI \n0. NO\n", 0, 1);
     while (op == 1)
     {
@@ -94,6 +104,9 @@ void genData(char name[], char name2[], char apPat[], char apMat[], char sday[],
         } while (validarCad(apMat) == 1);
         op = 0;
     }
+    eliminarPrepo(apMat, prepos);
+    eliminarPrepo(apMat, prepos2);
+    eliminarPrepo(apMat, prepos2);
     removeEspacios(apMat);
     validEnie(apMat);
 
@@ -114,6 +127,12 @@ void genData(char name[], char name2[], char apPat[], char apMat[], char sday[],
     }
     validEnie(name);
     validEnie(name2);
+    eliminarPrepo(name, prepos);
+    eliminarPrepo(name, prepos2);
+    eliminarPrepo(name, prepos2);
+    eliminarPrepo(name2, prepos);
+    eliminarPrepo(name2, prepos2);
+    eliminarPrepo(name2, prepos2);
     removeEspacios(name);
     removeEspacios(name2);
     validU(name2);
@@ -135,7 +154,7 @@ void genData(char name[], char name2[], char apPat[], char apMat[], char sday[],
     {
         states();
         state = validar("INGRESA TU ESTADO DE NACIMIENTO: ", 1, 33);
-        itoa(state, sstate, 10);
+        curpState(curp, state);
     } while (state == 0);
 }
 
@@ -175,7 +194,7 @@ void fecha(int day, int month, int year, char sday[], char smonth[], char syear[
             day = validar("INGRESA TU DIA DE NACIMIENTO (DOS DIGITOS): ", 1, 30);
         }
         else
-        {   
+        {
             day = validar("INGRESA TU DIA DE NACIMIENTO (DOS DIGITOS): ", 1, 31);
         }
     }
@@ -248,12 +267,8 @@ void inicio4(char apPat[], char apMat[], char name[], char name2[], char curp[])
     char pnegadas[81][5] = {"BACA", "BAKA", "BUEI", "BUEY", "CACA", "CACO", "CAGA", "CAGO", "CAKA", "CAKO", "COGE", "COGI", "COJA", "COJE", "COJI", "COJO", "COLA", "CULO", "FALO", "FETO", "GETA", "GUEI", "GUEY", "JETA", "JOTO", "KACA", "KACO", "KAGA", "KAGO", "KAKA", "KAKO", "KOGE", "KOGI", "KOJA", "KOJE", "KOJI", "KOJO", "KOLA", "KULO", "LILO", "LOCA", "LOCO", "LOKA", "LOKO", "MAME", "MAMO", "MEAR", "MEAS", "MEON", "MIAR", "MION", "MOCO", "MOKO", "MULA", "MULO", "NACA", "NACO", "PEDA", "PEDO", "PENE", "PIPI", "PITO", "POPO", "PUTA", "PUTO", "QULO", "RATA", "ROBA", "ROBE", "ROBO", "RUIN", "SENO", "TETA", "VACA", "VAGA", "VAGO", "VAKA", "VUEI", "VUEY", "WUEI", "WUEY"};
     char jose[4] = "JOSE";
     char maria[5] = "MARIA";
-    char ma[2]="MA";
-    char maP[3]= "MA.";
-    char ij[1]="J";
-    char jP[2]="J.";
 
-    if (apPat[0] != 'Ñ')
+    if ((unsigned char)apPat[0] != 'Ñ')
     {
         iniciales[0] = apPat[0];
     }
@@ -302,14 +317,6 @@ void inicio4(char apPat[], char apMat[], char name[], char name2[], char curp[])
         }
     } while (band2 == FALSE && i < 5);
 
-    ///////VALIDA ESTO FOK
-    if((strcmp(name, ma) == 1) && (strcmp(name,  maP)==1)){
-        band=FALSE;
-    }
-    if((strcmp(name, ij)==1) && (strcmp(name, jP)==1)){
-        band=FALSE;
-    }
-
     if (band == FALSE || band2 == FALSE)
     {
         iniciales[3] = name2[0];
@@ -319,24 +326,46 @@ void inicio4(char apPat[], char apMat[], char name[], char name2[], char curp[])
         iniciales[3] = name[0];
     }
 
-    j = 0;
+    // Valida J. J MA. MA
+    if (strcmp(name, "JX") == 0)
+    {
+        iniciales[3] = name2[0];
+    }
+
+    if (strcmp(name, "J") == 0)
+    {
+        iniciales[3] = name2[0];
+    }
+
+    if (strcmp(name, "MAX") == 0)
+    {
+        iniciales[3] = name2[0];
+    }
+
+    if (strcmp(name, "MA") == 0)
+    {
+        iniciales[3] = name2[0];
+    }
+
     i = 0;
+
     do
     { // Verifica que las 4 iniciales no este en las palabras inconvenientes
         band = FALSE;
         same = 0;
+        j = 0;
         do
         {
-            if (iniciales[i] == pnegadas[j][i])
+            if (iniciales[j] == pnegadas[i][j])
             {
                 same++;
-                i++;
+                j++;
             }
             else
             {
                 band = TRUE;
             }
-        } while (band == FALSE && i < 4);
+        } while (band == FALSE && j < 4);
         if (same == 4)
         {
             iniciales[1] = 'X';
@@ -394,14 +423,11 @@ void curpSexo(char curp[], char ssex[])
     }
 }
 
-void curpState(char curp[], char sstate[])
+void curpState(char curp[], int estado)
 {
-    int i, estado;
-    estado = atoi(sstate);
-    i = estado - 1;
-    char iniEstado[33][3] = {"AS", "BC", "BS", "CC", "CS", "CH", "CL", "CM", "DF", "DG", "GT", "GR", "HG", "JC", "MC", "MN", "MS", "NT", "NL", "OC", "PL", "QT", "QR", "SP", "SL", "SR", "TC", "TS", "TL", "VZ", "YN", "ZS", "NE"};
-    curp[11] = iniEstado[i][0];
-    curp[12] = iniEstado[i][1];
+    char iniEstado[33][3] = {"AS", "BC", "BS", "CC", "CS", "CH", "CL", "CM", "DG", "GT", "GR", "HG", "JC", "MC", "MN", "MS", "NT", "NL", "OC", "PL", "QT", "QR", "SP", "SL", "SR", "TC", "TS", "TL", "VZ", "YN", "ZS", "DF", "NE"};
+    curp[11] = iniEstado[estado - 1][0];
+    curp[12] = iniEstado[estado - 1][1];
 }
 
 void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[])
@@ -409,10 +435,10 @@ void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[
     int band, band2, i = 0;
     char jose[4] = "JOSE";
     char maria[5] = "MARIA";
-    char ma[2]="MA";
-    char maP[3]= "MA.";
-    char ij[1]="J";
-    char jP[2]="J.";
+    char ma[2] = "MA";
+    char maP[3] = "MAX";
+    char ij[1] = "J";
+    char jP[2] = "JX";
 
     curp[13] = buscaCons(apPat);
     curp[14] = buscaCons(apMat);
@@ -444,11 +470,13 @@ void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[
         }
     } while (band2 == FALSE && i < 5);
 
-    if((strcmp(name, ma) == 1) && (strcmp(name,  maP)==1)){
-        band=FALSE;
+    if ((strcmp(name, ma) == 1) && (strcmp(name, maP) == 1))
+    {
+        band = TRUE;
     }
-    if((strcmp(name, ij)==1) && (strcmp(name, jP)==1)){
-        band=FALSE;
+    if ((strcmp(name, ij) == 1) && (strcmp(name, jP) == 1))
+    {
+        band = TRUE;
     }
 
     if (band == FALSE || band2 == FALSE)
