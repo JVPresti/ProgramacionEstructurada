@@ -76,8 +76,7 @@ void curpmain()
 void genData(char name[], char name2[], char apPat[], char apMat[], char sday[], char smonth[], char syear[], char ssex[], int sex, int state, int day, int month, int year, char curp[])
 {
     int op;
-    char prepos[19][5] = {"DA", "DE", "DI", "DD", "EL", "LA", "LE", "MC", "DAS", "DEL", "DER", "DIE", "LOS", "LAS", "LES", "MAC", "VAN", "VON", "Y"};
-    char prepos2[19][5] = {" DA", " DE", " DI", " DD", " EL", " LA", " LE", " MC", " DAS", " DEL", " DER", " DIE", " LOS", " LAS", " LES", " MAC", " VAN", " VON", " Y"};
+    char prepos[19][5] = {"DA ", "DE ", "DI ", "DD ", "EL ", "LA ", "LE ", "MC ", "DAS ", "DEL ", "DER ", "DIE ", "LOS ", "LAS ", "LES ", "MAC ", "VAN ", "VON ", "Y "};
 
     op = validar("Tiene apellido paterno? \n1. SI \n0. NO\n", 0, 1);
     while (op == 1)
@@ -89,8 +88,8 @@ void genData(char name[], char name2[], char apPat[], char apMat[], char sday[],
         op = 0;
     }
     eliminarPrepo(apPat, prepos);
-    eliminarPrepo(apPat, prepos2);
-    eliminarPrepo(apPat, prepos2);
+    eliminarPrepo(apPat, prepos);
+    eliminarPrepo(apPat, prepos);
     removeEspacios(apPat);
     validEnie(apPat);
     system("CLS");
@@ -105,8 +104,8 @@ void genData(char name[], char name2[], char apPat[], char apMat[], char sday[],
         op = 0;
     }
     eliminarPrepo(apMat, prepos);
-    eliminarPrepo(apMat, prepos2);
-    eliminarPrepo(apMat, prepos2);
+    eliminarPrepo(apMat, prepos);
+    eliminarPrepo(apMat, prepos);
     removeEspacios(apMat);
     validEnie(apMat);
 
@@ -128,11 +127,11 @@ void genData(char name[], char name2[], char apPat[], char apMat[], char sday[],
     validEnie(name);
     validEnie(name2);
     eliminarPrepo(name, prepos);
-    eliminarPrepo(name, prepos2);
-    eliminarPrepo(name, prepos2);
+    eliminarPrepo(name, prepos);
+    eliminarPrepo(name, prepos);
     eliminarPrepo(name2, prepos);
-    eliminarPrepo(name2, prepos2);
-    eliminarPrepo(name2, prepos2);
+    eliminarPrepo(name2, prepos);
+    eliminarPrepo(name2, prepos);
     removeEspacios(name);
     removeEspacios(name2);
     validU(name2);
@@ -436,6 +435,7 @@ void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[
     char jose[4] = "JOSE";
     char maria[5] = "MARIA";
     char ma[2] = "MA";
+    char m[1]= "M";
     char maP[3] = "MAX";
     char ij[1] = "J";
     char jP[2] = "JX";
@@ -470,7 +470,7 @@ void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[
         }
     } while (band2 == FALSE && i < 5);
 
-    if ((strcmp(name, ma) == 1) && (strcmp(name, maP) == 1))
+    if ((strcmp(name, ma) == 1) && (strcmp(name, maP) == 1) && (strcmp(name, m) == 1))
     {
         band = TRUE;
     }
