@@ -155,7 +155,7 @@ void fecha(int day, int month, int year, char sday[], char smonth[], char syear[
     do
     {
         month = validar("ELIGE EL NUMERO DE TU MES: ", 1, 12);
-    } while (year == 2023 && month >= 10);
+    } while (year == 2023 && month > 10);
     system("cls");
     if (month == 2)
     {
@@ -175,7 +175,7 @@ void fecha(int day, int month, int year, char sday[], char smonth[], char syear[
             day = validar("INGRESA TU DIA DE NACIMIENTO (DOS DIGITOS): ", 1, 30);
         }
         else
-        {
+        {   
             day = validar("INGRESA TU DIA DE NACIMIENTO (DOS DIGITOS): ", 1, 31);
         }
     }
@@ -248,6 +248,10 @@ void inicio4(char apPat[], char apMat[], char name[], char name2[], char curp[])
     char pnegadas[81][5] = {"BACA", "BAKA", "BUEI", "BUEY", "CACA", "CACO", "CAGA", "CAGO", "CAKA", "CAKO", "COGE", "COGI", "COJA", "COJE", "COJI", "COJO", "COLA", "CULO", "FALO", "FETO", "GETA", "GUEI", "GUEY", "JETA", "JOTO", "KACA", "KACO", "KAGA", "KAGO", "KAKA", "KAKO", "KOGE", "KOGI", "KOJA", "KOJE", "KOJI", "KOJO", "KOLA", "KULO", "LILO", "LOCA", "LOCO", "LOKA", "LOKO", "MAME", "MAMO", "MEAR", "MEAS", "MEON", "MIAR", "MION", "MOCO", "MOKO", "MULA", "MULO", "NACA", "NACO", "PEDA", "PEDO", "PENE", "PIPI", "PITO", "POPO", "PUTA", "PUTO", "QULO", "RATA", "ROBA", "ROBE", "ROBO", "RUIN", "SENO", "TETA", "VACA", "VAGA", "VAGO", "VAKA", "VUEI", "VUEY", "WUEI", "WUEY"};
     char jose[4] = "JOSE";
     char maria[5] = "MARIA";
+    char ma[2]="MA";
+    char maP[3]= "MA.";
+    char ij[1]="J";
+    char jP[2]="J.";
 
     if (apPat[0] != 'Ñ')
     {
@@ -297,6 +301,14 @@ void inicio4(char apPat[], char apMat[], char name[], char name2[], char curp[])
             band2 = TRUE;
         }
     } while (band2 == FALSE && i < 5);
+
+    ///////VALIDA ESTO FOK
+    if((strcmp(name, ma) == 1) && (strcmp(name,  maP)==1)){
+        band=FALSE;
+    }
+    if((strcmp(name, ij)==1) && (strcmp(name, jP)==1)){
+        band=FALSE;
+    }
 
     if (band == FALSE || band2 == FALSE)
     {
@@ -397,6 +409,11 @@ void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[
     int band, band2, i = 0;
     char jose[4] = "JOSE";
     char maria[5] = "MARIA";
+    char ma[2]="MA";
+    char maP[3]= "MA.";
+    char ij[1]="J";
+    char jP[2]="J.";
+
     curp[13] = buscaCons(apPat);
     curp[14] = buscaCons(apMat);
 
@@ -426,6 +443,13 @@ void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[
             band2 = TRUE;
         }
     } while (band2 == FALSE && i < 5);
+
+    if((strcmp(name, ma) == 1) && (strcmp(name,  maP)==1)){
+        band=FALSE;
+    }
+    if((strcmp(name, ij)==1) && (strcmp(name, jP)==1)){
+        band=FALSE;
+    }
 
     if (band == FALSE || band2 == FALSE)
     {
@@ -469,4 +493,3 @@ void curpHomonimia(char curp[], char syear[])
     curp[17] = num[0];
     curp[18] = '\0';
 }
-// valida que no se creen curps de gente no nacida, mes, dia

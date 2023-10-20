@@ -134,13 +134,22 @@ int validarCad(char cadena[])
                     {
                         if (cadena[i] == -92 || cadena[i] == -91)
                         {
-
                             n = 0;
                         }
                         else
                         {
-                            no = 1;
-                            printf("El texto no puede contener caracteres especiales\n");
+                            if (cadena[i] == 46)
+                            {
+                                cadena[i]='O';
+                                cadena[i+1]='S';
+                                cadena[i+2]='E';
+                                no = 0;
+                            }
+                            else
+                            {
+                                no = 1;
+                                printf("El texto no puede contener caracteres especiales\n");
+                            }
                         }
                     }
                 }
