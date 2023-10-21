@@ -534,8 +534,6 @@ void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[
             }
         }
     }
-    printf("\n%c", curp[15]);
-    system("pause");
 }
 
 void curpHomonimia(char curp[], char syear[])
