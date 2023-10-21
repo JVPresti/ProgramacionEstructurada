@@ -435,7 +435,7 @@ void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[
     char jose[4] = "JOSE";
     char maria[5] = "MARIA";
     char ma[2] = "MA";
-    char m[1]= "M";
+    char m[1] = "M";
     char maP[3] = "MAX";
     char ij[1] = "J";
     char jP[2] = "JX";
@@ -470,11 +470,11 @@ void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[
         }
     } while (band2 == FALSE && i < 5);
 
-    if ((strcmp(name, ma) == 1) && (strcmp(name, maP) == 1) && (strcmp(name, m) == 1))
+    if ((strcmp(name, ma) != 0) || (strcmp(name, maP) != 0) || (strcmp(name, m) != 0) || (strcmp(name, maria) != 0))
     {
-        band = TRUE;
+        band2 = TRUE;
     }
-    if ((strcmp(name, ij) == 1) && (strcmp(name, jP) == 1))
+    if ((strcmp(name, ij) != 0) || (strcmp(name, jP) != 0) || (strcmp(name, jose) != 0))
     {
         band = TRUE;
     }
@@ -487,6 +487,55 @@ void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[
     {
         curp[15] = buscaCons(name);
     }
+
+    if (strcmp(name, "MAX") == 0)
+    {
+        curp[15] = buscaCons(name2);
+    }
+    else
+    {
+        if (strcmp(name, "MA") == 0)
+        {
+            curp[15] = buscaCons(name2);
+        }
+        else
+        {
+            if (strcmp(name, "M") == 0)
+            {
+                curp[15] = buscaCons(name2);
+            }
+            else
+            {
+                if (strcmp(name, "JX") == 0)
+                {
+                    curp[15] = buscaCons(name2);
+                }
+                else
+                {
+                    if (strcmp(name, "J") == 0)
+                    {
+                        curp[15] = buscaCons(name2);
+                    }
+                    else
+                    {
+                        if (strcmp(name, "MARIA") == 0)
+                        {
+                            curp[15] = buscaCons(name2);
+                        }
+                        else
+                        {
+                            if (strcmp(name, "JOSE") == 0)
+                            {
+                                curp[15] = buscaCons(name2);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    printf("\n%c", curp[15]);
+    system("pause");
 }
 
 void curpHomonimia(char curp[], char syear[])

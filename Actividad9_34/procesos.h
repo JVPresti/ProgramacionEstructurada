@@ -359,14 +359,13 @@ char buscavocal(char cad[])
 // Funcion que busca la primera consonante
 char buscaCons(char cad[])
 {
-    char vocal;
     int n, i;
     n = strlen(cad);
     i = 1;
     while (i < n)
     {
         if (cad[i] != 'A' && cad[i] != 'E' && cad[i] != 'I' && cad[i] != 'O' && cad[i] != 'U' && cad[i] != ' ')
-        {
+        {   
             return cad[i];
         }
         i++;
