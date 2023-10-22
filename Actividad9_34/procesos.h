@@ -11,11 +11,8 @@
 #include <time.h>
 
 // Declaracion de los prototipos de las funciones de la libreria
-int busq_seq(int vect[], int n, int num);
 void convmayus(char cadena[]);
-void convminus(char cadena[]);
 int validar(char msg[], int ri, int rf);
-void ordenar(int vect[], int n);
 int nrand(int ri, int rf);
 int validarCad(char cadena[]);
 int valiAlfa(char cadena[]);
@@ -59,6 +56,7 @@ void validEnie(char cad[])
     }
 }
 
+//Elimina las preposiciones
 void eliminarPrepo(char cadena[], char preposiciones[][5])
 {
     int i, n;
@@ -82,7 +80,7 @@ void validU(char cad[])
 
     for (i = 0; i < n; i++)
     {
-        if (cad[i] == 129 || cad[i] == 154)
+        if ((unsigned char)cad[i] == 129 || (unsigned char)cad[i] == 154)
         {
             cad[i] = 'U';
         }
@@ -106,7 +104,43 @@ int validarCad(char cadena[])
         }
         for (i = 0; cadena[i] != '\0'; i++)
         {
+            if ((unsigned char)cadena[i] == 181)
+            {
+                cadena[i] = 'A';
+            }
+            if ((unsigned char)cadena[i] == 142)
+            {
+                cadena[i] = 'A';
+            }
+            if ((unsigned char)cadena[i] == 144)
+            {
+                cadena[i] = 'E';
+            }
+            if ((unsigned char)cadena[i] == 211)
+            {
+                cadena[i] = 'E';
+            }
+            if ((unsigned char)cadena[i] == 214)
+            {
+                cadena[i] = 'I';
+            }
+            if ((unsigned char)cadena[i] == 216)
+            {
+                cadena[i] = 'I';
+            }
+            if ((unsigned char)cadena[i] == 224)
+            {
+                cadena[i] = 'O';
+            }
+            if ((unsigned char)cadena[i] == 153)
+            {
+                cadena[i] = 'O';
+            }
             if ((unsigned char)cadena[i] == 154)
+            {
+                cadena[i] = 'U';
+            }
+            if ((unsigned char)cadena[i] == 233)
             {
                 cadena[i] = 'U';
             }
@@ -192,7 +226,7 @@ int validarCad(char cadena[])
     return 0;
 }
 
-// Funcionq ue valide que no inicie o termine con especios, ni haya doble espacios
+// Funcion que valida que no inicie o termine con especios, ni haya doble espacios
 int valiEspacios(char cadena[])
 {
     int i = 0;
@@ -260,50 +294,6 @@ int valiAlfa(char cadena[])
     return 1;
 }
 
-// Funcion que ordena el vector de menor a mayor
-void ordenar(int vect[], int n)
-{
-    int i, j, aux;
-    for (i = 0; i < n - 1; i++)
-    {
-        for (j = i + 1; j < n; j++)
-        {
-            if (vect[j] <= vect[i])
-            {
-                aux = vect[i]; // Metodo de burbuja
-                vect[i] = vect[j];
-                vect[j] = aux;
-            }
-        }
-    }
-}
-
-// Funcion que busca si hay n elemento en el un vector
-int busq_seq(int vect[], int n, int num)
-{
-    int i;
-    for (i = 0; i < n; i++)
-    {
-        if (vect[i] == num)
-        {
-            return i; // Regresa esto si encontro un numero igual
-        }
-    }
-    return -1; // regresa esto si es que no hay ninguno igual
-}
-
-// Funcion que cuando es llamada cuanta el largo de la cadena
-int largo_cadena(char cadena[])
-{
-    int i;
-    i = 0;
-    while (cadena[i] != '\0')
-    {
-        i++;
-    }
-    return i;
-}
-
 // Funcion que cuando es llamada convierte todoa mayusculas
 void convmayus(char cadena[])
 {
@@ -323,26 +313,9 @@ void convmayus(char cadena[])
     }
 }
 
-// Esta funcion cuando es llamada convierte la cadena a minusculas
-void convminus(char cadena[])
-{
-    int i;
-    char caracter;
-
-    for (i = 0; cadena[i] != '\0'; i++)
-    {
-        caracter = cadena[i];
-        if (caracter >= 'A' && caracter <= 'Z')
-        {
-            caracter += 32;
-        }
-    }
-}
-
 // Retorna la primera vocal que encuentra
 char buscavocal(char cad[])
 {
-    char vocal;
     int i = 1, n;
     n = strlen(cad);
     while (i < n)

@@ -1,3 +1,7 @@
+// Jorge Antono Vazquez Guzman 372504
+// 20 de octubre del 2023 -- 21 de octubre del 2023
+// Programa para generar la curp
+// JAVG_Act9_3-4_932
 #include "procesos.h"
 #define TRUE 1
 #define FALSE 0
