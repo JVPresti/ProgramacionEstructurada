@@ -247,6 +247,7 @@ bool ordVectQuick(Todo vect[])
     int n;
     n = sizeof(vect) / sizeof(vect[0]);
     qsort(vect, n, sizeof(int), compararEnteros);
+    return true;
 }
 
 int compararEnteros(const void *a, const void *b)
