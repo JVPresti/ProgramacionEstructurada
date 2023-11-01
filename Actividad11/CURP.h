@@ -1,9 +1,37 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-#include "procesos.h"
 #define TRUE 1
 #define FALSE 0
+
+typedef long Tkey;
+
+typedef struct _nom
+{
+    char name[30];
+    char name2[30];
+    char apPat[30];
+    char apMat[30];
+} Tname;
+
+typedef struct _fecha
+{
+    int day;
+    int month;
+    int year;
+} Tfecha;
+
+typedef struct _personas
+{
+    int status;
+    Tkey key;
+    int matri;
+    Tname name;
+    Tfecha fecha;
+    int sexo;
+    int state;
+    char curp[19];
+} Todo; // Nueva manera de identificarlo
 
 void curpmain(Todo perso);
 void genData(char name[], char name2[], char apPat[], char apMat[], char sday[], char smonth[], char syear[], char ssex[], int sex, int state, int day, int month, int year, char curp[]);
@@ -29,13 +57,12 @@ void curpmain(Todo perso)
     strcpy(apPat, perso.name.apPat);
     strcpy(apMat, perso.name.apMat);
     strcpy(ssex, perso.sexo);
+    puts(apPat);
+    system("pause");
     day = perso.fecha.day;
-    printf("%d", day);
     month = perso.fecha.month;
-    printf("%d", month);
     year = perso.fecha.year;
-    printf("%d", year);
-    state = perso.edo;
+    state = perso.state;
     printf("entro");
     system("pause");
 

@@ -7,36 +7,6 @@
 #include "curp.h"
 #define N 2000
 
-// Declaracion del struct
-typedef long Tkey;
-
-typedef struct _nom
-{
-    char name[30];
-    char name2[30];
-    char apPat[30];
-    char apMat[30];
-} Tname;
-
-typedef struct _fecha
-{
-    int day;
-    int month;
-    int year;
-} Tfecha;
-
-typedef struct _personas
-{
-    int status;
-    Tkey key;
-    int matri;
-    Tname name;
-    Tfecha fecha;
-    int sexo;
-    int state;
-    char curp[19];
-} Todo; // Nueva manera de identificarlo
-
 // Lista de nombres y apellidos
 char nameH[20][30] = {"RODRIGO", "ERNESTO", "PEDRO", "ISMAEL", "CARLOS", "JUAN", "LUIS", "ANGEL", "ANTONIO", "OMAR", "ISRAEL", "EDGAR", "ARMANDO", "ENRIQUE", "RICARDO", "JAVIER", "ALFREDO", "ALEX", "MIGUEL", "MANUEL"};
 char nameM[20][30] = {"MARIA", "ROSARIO", "SOFIA", "TRINIDAD", "GABRIELA", "LUISA", "MONICA", "MELISSA", "JAZMIN", "JANNETH", "DANNA", "LIZETH", "XIMENA", "TALIA", "ESTHER", "ISIS", "LUCIA", "ISABELA", "ISABEL", "ANA"};
@@ -193,7 +163,7 @@ void menu()
 // Esta funcion imprime los registros
 void imprimir(Todo vect[], int n)
 {
-    int i;
+    /*int i;
     system("CLS");
     printf("MATRICULA   NOMBRE                           APPAT                            APMAT                            EDAD   SEXO  \n");
     for (i = 0; i < n; i++)
@@ -211,7 +181,7 @@ void imprimir(Todo vect[], int n)
             }
         }
     }
-    system("pause");
+    system("pause");*/
 }
 
 // Esta funcion ordena el vector por matriculas, es booleana para que la bandera sepa que ya esta ordenado
@@ -244,7 +214,7 @@ Todo genAlumRan()
     alum.matri = nrand(300000, 399999);              // Genera una matricula aleatoria
     strcpy(alum.name.apPat, lastname[nrand(0, 39)]); // Toma uno de los apellidos/nombres de manera aleatoria
     strcpy(alum.name.apMat, lastname[nrand(0, 39)]);
-    alum.edad = nrand(18, 65); // Rango de edades
+    //alum.edad = nrand(18, 65); // Rango de edades
     alum.sexo = nrand(1, 2);
 
     if (alum.sexo == 1)
@@ -312,12 +282,17 @@ Todo genAlumMan()
     strcpy(alum.name.name2, txt); 
     //! ME QUEDE AQUI Y TENGO QUE MANDARLO A LA CURPMAIN
 
+    alum.sexo = validar("Sexo (1. Hombre, 2. Mujer): ", 1, 2);
     system("CLS");
     fecha(alum);
     system("CLS");
-    alum.sexo = validar("Sexo (1. Hombre, 2. Mujer): ", 1, 2);
+    
+    states();
+    alum.state=validar("Ingresa el numero del estado: ", 1, 33);
 
     curpmain(alum);
+    printf("no entro");
+    system("pause");
 
     return alum;
 }
