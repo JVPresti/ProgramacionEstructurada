@@ -7,20 +7,19 @@
 #include "curp.h"
 #define N 2000
 
-// Lista de nombres y apellidos
-char nameH[20][30] = {"RODRIGO", "ERNESTO", "PEDRO", "ISMAEL", "CARLOS", "JUAN", "LUIS", "ANGEL", "ANTONIO", "OMAR", "ISRAEL", "EDGAR", "ARMANDO", "ENRIQUE", "RICARDO", "JAVIER", "ALFREDO", "ALEX", "MIGUEL", "MANUEL"};
-char nameM[20][30] = {"MARIA", "ROSARIO", "SOFIA", "TRINIDAD", "GABRIELA", "LUISA", "MONICA", "MELISSA", "JAZMIN", "JANNETH", "DANNA", "LIZETH", "XIMENA", "TALIA", "ESTHER", "ISIS", "LUCIA", "ISABELA", "ISABEL", "ANA"};
-char lastname[40][30] = {"PEREZ", "RODRIGUEZ", "BUSTAMANTE", "GONZALEZ", "VAZQUEZ", "GUZMAN", "FERNANDEZ", "OSUNA", "VILLEGAS", "BUENO", "CORTES", "CORONADO0", "SANCHEZ", "SILVA", "OROZCO", "MARTINEZ", "GOMEZ", "ANDA", "FLORES", "JAUREGUI", "DIAZ", "VALENZUELA", "OCTAVIANO", "MORALES", "RABAGO", "PACHECO", "DUARTE", "DIARTE", "COLOMO", "CASTRO", "MORENO", "TORRES", "ORTIZ", "GUTIERRREZ", "CONCLIN", "ISLAS", "REYES", "CAZARES", "MEDINA", "MELENDEZ"};
-
 // Declaracion de prototipos de funciones
 void menu();
 void imprimir(Todo vect[], int n);
-Todo genAlumRan();
-Todo genAlumMan();
+Todo genAlumRan(Todo *alum, int alumnos);
+Todo genAlumMan(Todo *alum, int alumnos);
 int busqSeqMatricula(Todo vect[], int n, int matri);
 int busqMatricula(Todo vect[], int n, int matri, bool band);
 int busqBin(Todo vect[], int n, int matri);
 bool ordVect(Todo vect[], int n);
+bool ordVectQuick(Todo vect[]);
+int compararEnteros(const void *a, const void *b);
+void archivo(Todo vect[], int n);
+void impriOne(Todo alum);
 
 // Funcion main
 int main()
@@ -35,7 +34,7 @@ void menu()
 {
     int op, i, j, alumnos = 0, matri;
     bool band;
-    Todo alum;    // Un solo alumno
+    Todo alum[N]; // Un solo alumno
     Todo vect[N]; // El vector donde se guarda toda la informacion
 
     system("CLS");
@@ -43,14 +42,15 @@ void menu()
     {
 
         printf("\n \t MENU");
-        printf("\n1. Agregar Automatico");
-        printf("\n2. Agregar manual");
+        printf("\n1. Agregar Automatico (100)");
+        printf("\n2. Agregar manual (1)");
         printf("\n3. Eliminar registro");
         printf("\n4. Buscar");
         printf("\n5. Ordenar");
         printf("\n6. Imprimir");
+        printf("\n7. Archivo txt");
         printf("\n0. Salir");
-        op = validar("\n Ingresa una opcion\n", 0, 6); // Valida las opciones
+        op = validar("\n Ingresa una opcion\n", 0, 7); // Valida las opciones
 
         switch (op)
         {
@@ -59,13 +59,17 @@ void menu()
             {
                 for (j = 0; j < 100; j++)
                 {
-                    alum = genAlumRan();                                      // Funcion que genera al alumno aleatorio
-                    while (busqSeqMatricula(vect, alumnos, alum.matri) != -1) // Esto busca que no se repita la matricula
+                    if ((alumnos + 1) <= N)
                     {
-                        alum.matri = nrand(300000, 399999); // Genera la matricula
+                        alum[alumnos] = genAlumRan(alum, alumnos); // Funcion que genera al alumno aleatorio
+
+                        while (busqSeqMatricula(vect, alumnos, alum[alumnos].matri) != -1) // Esto busca que no se repita la matricula
+                        {
+                            alum[alumnos].matri = nrand(300000, 399999); // Genera la matricula
+                        }
+                        vect[alumnos] = alum[alumnos]; // Guarda al alumno en una posicion de vector
+                        alumnos++;
                     }
-                    vect[alumnos] = alum; // Guarda al alumno en una posicion de vector
-                    alumnos++;
                 }
                 band = false; // Bandera en falso quiere decir que no esta ordenado
             }
@@ -78,13 +82,13 @@ void menu()
         case 2:
             if ((alumnos + 1) <= N) // Esto es para llenado manual
             {
-                alum = genAlumMan(); // Llama a la funcion para generar a un alumno de manera manual
+                alum[alumnos] = genAlumMan(alum, alumnos); // Llama a la funcion para generar a un alumno de manera manual
 
-                while ((busqSeqMatricula(vect, alumnos, alum.matri)) != -1) // Valida que no se repita la matricula
+                while ((busqSeqMatricula(vect, alumnos, alum[alumnos].matri)) != -1) // Valida que no se repita la matricula
                 {
-                    alum.matri = validar("Esa matricula ya existe, ingresa otra: ", 300000, 399999);
+                    alum[alumnos].matri = validar("Esa matricula ya existe, ingresa otra: ", 300000, 399999);
                 }
-                vect[alumnos] = alum; // Guarda al alumno
+                vect[alumnos] = alum[alumnos]; // Guarda al alumno
                 alumnos++;
                 band = false;
             }
@@ -125,6 +129,7 @@ void menu()
             if (i != -1)
             {
                 printf("Si se encuentra en el vector\n");
+                impriOne(alum[i]);
                 system("pause");
             }
             else
@@ -141,13 +146,25 @@ void menu()
             }
             else
             {
-                band = ordVect(vect, alumnos);
-                printf("El vector se ha ordenado con exito\n");
-                system("pause");
+                if (alumnos < 500)
+                {
+                    band = ordVect(vect, alumnos);
+                    printf("El vector se ha ordenado con exito usando Bubble Sort\n");
+                    system("pause");
+                }
+                else
+                {
+                    band = ordVectQuick(vect);
+                    printf("El vector se ha ordenado con exito usando el metodo de QuickSort\n");
+                    system("pause");
+                }
             }
             break;
         case 6:
-            imprimir(vect, alumnos);
+            imprimir(alum, alumnos);
+            break;
+        case 7:
+            archivo(vect, alumnos);
             break;
         case 0:
             printf("Hasta luego....\n");
@@ -155,7 +172,7 @@ void menu()
             break;
         default:
             printf("Opcion invalida...");
-            system("pause");
+            system("PAUSE");
         }
     } while (op != 0); // Cuando es 0 el programa termina
 }
@@ -163,15 +180,15 @@ void menu()
 // Esta funcion imprime los registros
 void imprimir(Todo vect[], int n)
 {
-    /*int i;
+    int i;
     system("CLS");
-    printf("MATRICULA   NOMBRE                           APPAT                            APMAT                            EDAD   SEXO  \n");
+    printf("MATRICULA   NOMBRE    \t\t   APPAT      \t\t    APMAT  \t\t      EDAD \t \t\t CURP\t\t SEXO  \n");
     for (i = 0; i < n; i++)
     {
         if (vect[i].status != 0) // Esto es para que solo imprima a los que tienen estatus 1
         {
-            printf("%-9d   %-30s   %-30s   %-30s   %-4d   ", vect[i].matri, vect[i].nombre, vect[i].apPat, vect[i].apMat, vect[i].edad); // Imprime todos los datos
-            if (vect[i].sexo == 1)
+            printf("%-9d   %-20s   %-20s   %-20s   %-4s/%-4s/%-4s \t %-4s  ", vect[i].matri, vect[i].name.name, vect[i].name.apPat, vect[i].name.apMat, vect[i].fecha.day, vect[i].fecha.month, vect[i].fecha.year, vect[i].curp); // Imprime todos los datos
+            if (strcmp(vect[i].sexo, "H"))
             {
                 printf("HOMBRE\n");
             }
@@ -181,7 +198,27 @@ void imprimir(Todo vect[], int n)
             }
         }
     }
-    system("pause");*/
+    system("pause");
+}
+
+void impriOne(Todo alum)
+{
+    printf("STATUS: ");
+    printf("%s\n", alum.status == 1 ? "ACTIVO" : "NO ACTIVO");
+    printf("MATRICULA: ");
+    printf("%d\n", alum.matri);
+    printf("NOMBRE: ");
+    printf("%s\n", alum.name.name);
+    printf("AP. PATERNO: ");
+    printf("%s\n", alum.name.apPat);
+    printf("AP. MATERNO: ");
+    printf("%s\n", alum.name.apMat);
+    printf("FECHA NAC: ");
+    printf("%2s-%2s-%4s\n", alum.fecha.day, alum.fecha.month, alum.fecha.year);
+    printf("SEXO: ");
+    printf("%s\n", alum.sexo);
+    printf("CURP: ");
+    printf("%s\n", alum.curp);
 }
 
 // Esta funcion ordena el vector por matriculas, es booleana para que la bandera sepa que ya esta ordenado
@@ -205,41 +242,141 @@ bool ordVect(Todo vect[], int n)
     return true;
 }
 
-// Esta funcion genera a un alumno de manera aleatoria
-Todo genAlumRan()
+bool ordVectQuick(Todo vect[])
 {
-    Todo alum;
+    int n;
+    n = sizeof(vect) / sizeof(vect[0]);
+    qsort(vect, n, sizeof(int), compararEnteros);
+}
 
-    alum.status = 1;
-    alum.matri = nrand(300000, 399999);              // Genera una matricula aleatoria
-    strcpy(alum.name.apPat, lastname[nrand(0, 39)]); // Toma uno de los apellidos/nombres de manera aleatoria
-    strcpy(alum.name.apMat, lastname[nrand(0, 39)]);
-    //alum.edad = nrand(18, 65); // Rango de edades
-    alum.sexo = nrand(1, 2);
+int compararEnteros(const void *a, const void *b)
+{
+    return (*(int *)a - *(int *)b);
+}
 
-    if (alum.sexo == 1)
+// Esta funcion genera a un alumno de manera aleatoria
+Todo genAlumRan(Todo *alum, int alumnos)
+{
+    char nameH[20][30] = {"RODRIGO", "ERNESTO", "PEDRO", "ISMAEL", "CARLOS", "JUAN", "LUIS", "ANGEL", "ANTONIO", "OMAR", "ISRAEL", "EDGAR", "ARMANDO", "ENRIQUE", "RICARDO", "JAVIER", "ALFREDO", "ALEX", "MIGUEL", "MANUEL"};
+    char nameM[20][30] = {"GABRIELA", "ROSARIO", "SOFIA", "TRINIDAD", "GABRIELA", "LUISA", "MONICA", "MELISSA", "JAZMIN", "JANNETH", "DANNA", "LIZETH", "XIMENA", "TALIA", "ESTHER", "ISIS", "LUCIA", "ISABELA", "ISABEL", "ANA"};
+    char lastname[40][30] = {"PEREZ", "RODRIGUEZ", "BUSTAMANTE", "GONZALEZ", "VAZQUEZ", "GUZMAN", "FERNANDEZ", "OSUNA", "VILLEGAS", "BUENO", "CORTES", "CORONADO0", "SANCHEZ", "SILVA", "OROZCO", "MARTINEZ", "GOMEZ", "ANDA", "FLORES", "JAUREGUI", "DIAZ", "VALENZUELA", "OCTAVIANO", "MORALES", "RABAGO", "PACHECO", "DUARTE", "DIARTE", "COLOMO", "CASTRO", "MORENO", "TORRES", "ORTIZ", "GUTIERRREZ", "CONCLIN", "ISLAS", "REYES", "CAZARES", "MEDINA", "MELENDEZ"};
+    char name1[30], apPat[30], apMat[30], curp[19], dayCad[3], monthCad[3], yearCad[3];
+
+    int sex, est, year, month, day, bi = FALSE;
+
+    alum[alumnos].status = 1;
+    alum[alumnos].matri = nrand(300000, 399999);              // Genera una matricula aleatoria
+    strcpy(alum[alumnos].name.apPat, lastname[nrand(0, 39)]); // Toma uno de los apellidos/nombres de manera aleatoria
+    strcpy(alum[alumnos].name.apMat, lastname[nrand(0, 39)]);
+
+    sex = rand() % 2 + 1;
+    if (sex == 1)
     {
-        strcpy(alum.name.name, nameH[nrand(0, 19)]);
+        strcpy(alum[alumnos].sexo, "H");
     }
     else
     {
-        strcpy(alum.name.name, nameM[nrand(0, 19)]);
+        strcpy(alum[alumnos].sexo, "M");
     }
 
-    return alum;
+    if (sex == 1)
+    {
+        strcpy(alum[alumnos].name.name, nameH[nrand(0, 19)]);
+    }
+    else
+    {
+        strcpy(alum[alumnos].name.name, nameM[nrand(0, 19)]);
+    }
+
+    year = rand() % (2023 - 1900 + 1) + 1900;
+    snprintf(alum[alumnos].fecha.year, sizeof(alum[alumnos].fecha.year), "%d", year);
+
+    if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
+    {
+        bi = TRUE;
+    }
+
+    if (year == 2023)
+    {
+        month = rand() % 11 + 1;
+    }
+    else
+    {
+        month = rand() % 12 + 1;
+    }
+    snprintf(alum[alumnos].fecha.month, sizeof(alum[alumnos].fecha.month), "%d", month);
+
+    if (month == 2)
+    {
+        if (bi == TRUE)
+        {
+            day = rand() % 29 + 1;
+        }
+        else
+        {
+            day = rand() % 28 + 1;
+        }
+    }
+    else
+    {
+        if (month == 4 || month == 6 || month == 9 || month == 11)
+        {
+            day = rand() % 30 + 1;
+        }
+        else
+        {
+            day = rand() % 31 + 1;
+        }
+    }
+    snprintf(alum[alumnos].fecha.day, sizeof(alum[alumnos].fecha.day), "%d", day);
+
+    est = rand() % 33 + 1;
+
+    alum[alumnos].state = est;
+
+    sprintf(dayCad, "%02d", day);
+    sprintf(monthCad, "%02d", month);
+    sprintf(yearCad, "%02d", year % 100);
+
+    curp[0] = primeraLetra(alum[alumnos].name.apPat) ? primeraLetra(alum[alumnos].name.apPat) : 'X';
+    curp[1] = buscavocal(alum[alumnos].name.apPat);
+    curp[2] = primeraLetra(alum[alumnos].name.apMat) ? primeraLetra(alum[alumnos].name.apMat) : 'X';
+    curp[3] = primeraLetra(alum[alumnos].name.name);
+    curp[4] = yearCad[0];
+    curp[5] = yearCad[1];
+    curp[6] = monthCad[0];
+    curp[7] = monthCad[1];
+    curp[8] = dayCad[0];
+    curp[9] = dayCad[1];
+    curp[10] = alum[alumnos].sexo[0];
+    curpState(curp, est);
+    curp[13] = buscaCons(alum[alumnos].name.apPat);
+    curp[14] = buscaCons(alum[alumnos].name.apMat);
+    curp[15] = buscaCons(alum[alumnos].name.name);
+    curpHomonimia(curp, yearCad);
+
+    strcpy(alum[alumnos].curp, curp);
+    strcpy(alum[alumnos].fecha.day, dayCad);
+    strcpy(alum[alumnos].fecha.month, monthCad);
+    strcpy(alum[alumnos].fecha.year, yearCad);
+    alum[alumnos].state = est;
+
+    // printf("%s ", alum[alumnos].name.name);
+    // system("pause");
+
+    return alum[alumnos];
 }
 
 // Esta funcion genera un alumno de manera manual
-Todo genAlumMan()
+Todo genAlumMan(Todo *alum, int alumnos)
 {
-    Todo alum;
-    char txt[30];
-    int op;
+    char name1[30], name2[30], apPat[30], apMat[30], sexo[2], state[3], day[3], month[3], year[5], curp[19];
+    int op, sex, edo;
 
-    alum.status = validar("Estatus (0. No activo, 1. Activo): ", 0, 1);
+    alum[alumnos].status = validar("Estatus (0. No activo, 1. Activo): ", 0, 1);
     system("CLS");
 
-    alum.matri = validar("Matricula (Entre 300000 y 399999): ", 300000, 399999); // Te valida la matricula y en el menu te dice si es que ya se encuentra
+    alum[alumnos].matri = validar("Matricula (Entre 300000 y 399999): ", 300000, 399999); // Te valida la matricula y en el menu te dice si es que ya se encuentra
     system("CLS");
 
     op = validar("Tiene apellido paterno? \n1. SI \n0. NO\n", 0, 1);
@@ -248,10 +385,9 @@ Todo genAlumMan()
         do
         {
             printf("\nApellido Paterno: ");
-        } while (validarCad(txt) == 1);
+        } while (validarCad(apPat) == 1);
         op = 0;
     }
-    strcpy(alum.name.apPat, txt); // Copia lo que se escribio al registro del apellido
 
     op = validar("Tiene apellido Materno? \n1. SI \n0. NO\n", 0, 1);
     while (op == 1)
@@ -259,16 +395,14 @@ Todo genAlumMan()
         do
         {
             printf("\nApellido Materno: ");
-        } while (validarCad(txt) == 1);
+        } while (validarCad(apMat) == 1);
         op = 0;
     }
-    strcpy(alum.name.apMat, txt);
 
     do
     {
         printf("\nNombre: ");
-    } while (validarCad(txt) == 1);
-    strcpy(alum.name.name, txt);
+    } while (validarCad(name1) == 1);
 
     op = validar("Tiene mas nombres? \n1. SI \n0. NO\n", 0, 1);
     while (op == 1)
@@ -276,25 +410,44 @@ Todo genAlumMan()
         do
         {
             printf("\nDemas Nombres: ");
-        } while (validarCad(txt) == 1);
+        } while (validarCad(name2) == 1);
         op = 0;
+        strcpy(alum[alumnos].name.name2, name2);
     }
-    strcpy(alum.name.name2, txt); 
-    //! ME QUEDE AQUI Y TENGO QUE MANDARLO A LA CURPMAIN
 
-    alum.sexo = validar("Sexo (1. Hombre, 2. Mujer): ", 1, 2);
+    sex = validar("Sexo (1. Hombre, 2. Mujer): ", 1, 2);
+    itoa(sex, sexo, 3);
     system("CLS");
-    fecha(alum);
-    system("CLS");
-    
-    states();
-    alum.state=validar("Ingresa el numero del estado: ", 1, 33);
 
-    curpmain(alum);
-    printf("no entro");
+    fecha(day, month, year);
+    system("CLS");
+
     system("pause");
+    states();
+    edo = validar("Ingresa el numero del estado: ", 1, 33);
+    snprintf(state, sizeof(state), "%d", edo);
 
-    return alum;
+    curpmain(name1, name2, apPat, apMat, state, sexo, day, month, year, curp, alum, alumnos);
+
+    strcpy(alum[alumnos].name.name, name1);
+    strcpy(alum[alumnos].name.apPat, apPat);
+    strcpy(alum[alumnos].name.apMat, apMat);
+    strcpy(alum[alumnos].curp, curp);
+    strcpy(alum[alumnos].fecha.day, day);
+    strcpy(alum[alumnos].fecha.month, month);
+    strcpy(alum[alumnos].fecha.year, year);
+    // alum[alumnos].sexo = atoi(sexo);
+    alum[alumnos].state = atoi(state);
+    if (sex == 1)
+    {
+        strcpy(alum[alumnos].sexo, "H");
+    }
+    else
+    {
+        strcpy(alum[alumnos].sexo, "M");
+    }
+
+    return alum[alumnos];
 }
 
 // Esta funcion busca la matricula de manera secuencial (desordenado)
@@ -354,4 +507,23 @@ int busqBin(Todo vect[], int n, int matri)
     }
 
     return -1; // No se encontro
+}
+
+void archivo(Todo vect[], int n)
+{
+    int i;
+    FILE *fa;
+    fa = fopen("registros.txt", "w");
+    fprintf(fa, "MATRICULA   NOMBRE         APPAT         APMAT          EDAD \t \t\t CURP\t\t SEXO  \n");
+    for (i = 0; i < n; i++)
+    {
+        if (vect[i].status != 0)
+        {
+            fprintf(fa, "%-9d   %-15s   %-10s   %-10s   %-4s/%-4s/%-4s \t %-4s  %s\n", vect[i].matri, vect[i].name.name, vect[i].name.apPat, vect[i].name.apMat, vect[i].fecha.day, vect[i].fecha.month, vect[i].fecha.year, vect[i].curp, vect[i].sexo);
+        }
+    }
+
+    printf("Archivo escrito con exito");
+    fclose(fa);
+    system("pause");
 }

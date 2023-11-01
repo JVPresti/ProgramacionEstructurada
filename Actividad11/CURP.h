@@ -16,9 +16,9 @@ typedef struct _nom
 
 typedef struct _fecha
 {
-    int day;
-    int month;
-    int year;
+    char day[3];
+    char month[3];
+    char year[5];
 } Tfecha;
 
 typedef struct _personas
@@ -28,14 +28,16 @@ typedef struct _personas
     int matri;
     Tname name;
     Tfecha fecha;
-    int sexo;
+    char sexo[2];
     int state;
     char curp[19];
 } Todo; // Nueva manera de identificarlo
 
-void curpmain(Todo perso);
-void genData(char name[], char name2[], char apPat[], char apMat[], char sday[], char smonth[], char syear[], char ssex[], int sex, int state, int day, int month, int year, char curp[]);
-Todo fecha(Todo perso);
+void curpmain(char name[], char name2[],char apPat[],char apMat[], char state[], char sexo[], char day[], char month[], char year[], char curp[], Todo alum[], int alumnos);
+void curpMainRand(char name[], char apPat[],char apMat[], int state, char sexo[], int day, int month, int year, char curp[]);
+void genData(char name[], char name2[], char apPat[], char apMat[]);
+void genDataRand(char name[], char apPat[], char apMat[]);
+void fecha(char day[], char month[], char year[]);
 void states(void);
 void meses(void);
 void inicio4(char apPat[], char apMat[], char name[], char name2[], char curp[]);
@@ -46,33 +48,20 @@ void curpConso(char curp[], char apPat[], char apMat[], char name[], char name2[
 void curpHomonimia(char curp[], char syear[]);
 
 
-void curpmain(Todo perso)
+void curpmain(char name[], char name2[],char apPat[],char apMat[], char state[], char sexo[], char day[], char month[], char year[], char curp[], Todo alum[], int alumnos)
 {
     srand(time(NULL));
-    int sex, day, month, year, state;
-    char curp[19], apPat[30], apMat[30], name[20], name2[20], sday[10], smonth[10], syear[10], ssex[10];
-
-    strcpy(name, perso.name.name);
-    strcpy(name2, perso.name.name2);
-    strcpy(apPat, perso.name.apPat);
-    strcpy(apMat, perso.name.apMat);
-    strcpy(ssex, perso.sexo);
-    puts(apPat);
-    system("pause");
-    day = perso.fecha.day;
-    month = perso.fecha.month;
-    year = perso.fecha.year;
-    state = perso.state;
-    printf("entro");
-    system("pause");
+    int istate;
+    istate= atoi(state);
 
     system("cls");
-    genData(name, name2, apPat, apMat, sday, smonth, syear, ssex, sex, state, day, month, year, curp);
+    genData(name, name2, apPat, apMat);
     inicio4(apPat, apMat, name, name2, curp);
-    curpFecha(curp, sday, smonth, syear);
-    curpSexo(curp, ssex);
+    curpFecha(curp, day, month, year);
+    curpSexo(curp, sexo);
+    curpState(curp, istate);
     curpConso(curp, apPat, apMat, name, name2);
-    curpHomonimia(curp, syear);
+    curpHomonimia(curp, year);
 
     for (int i = 0; i < 18; i++)
     {
@@ -80,19 +69,28 @@ void curpmain(Todo perso)
     }
     printf("\n");
     system("pause");
+}
 
-    system("cls");
+void curpMainRand(char name[], char apPat[],char apMat[], int state, char sexo[], int day, int month, int year, char curp[])
+{
+    srand(time(NULL));
+    char name2[2]="\0";
+    char sday[3], smonth[3], syear[5];
+    itoa(day, sday, 3);
+    itoa(month, smonth, 3);
+    itoa(year, syear, 5);
+
+
     for (int i = 0; i < 18; i++)
     {
-        perso.curp[i] = curp[i];
+        printf("%c", curp[i]);
     }
     printf("\n");
     system("pause");
 }
 
-void genData(char name[], char name2[], char apPat[], char apMat[], char sday[], char smonth[], char syear[], char ssex[], int sex, int state, int day, int month, int year, char curp[])
+void genData(char name[], char name2[], char apPat[], char apMat[])
 {
-    int op;
     char prepos[19][5] = {"DA ", "DE ", "DI ", "DD ", "EL ", "LA ", "LE ", "MC ", "DAS ", "DEL ", "DER ", "DIE ", "LOS ", "LAS ", "LES ", "MAC ", "VAN ", "VON ", "Y "};
     eliminarPrepo(apPat, prepos);
     removeEspacios(apPat);
@@ -113,14 +111,35 @@ void genData(char name[], char name2[], char apPat[], char apMat[], char sday[],
     system("pause");
 }
 
-Todo fecha(Todo perso)
+void genDataRand(char name[], char apPat[], char apMat[])
+{
+    char prepos[19][5] = {"DA ", "DE ", "DI ", "DD ", "EL ", "LA ", "LE ", "MC ", "DAS ", "DEL ", "DER ", "DIE ", "LOS ", "LAS ", "LES ", "MAC ", "VAN ", "VON ", "Y "};
+    eliminarPrepo(apPat, prepos);
+    removeEspacios(apPat);
+    validEnie(apPat);
+    eliminarPrepo(apMat, prepos);
+    removeEspacios(apMat);
+    validEnie(apMat);
+
+    validEnie(name);
+    eliminarPrepo(name, prepos);
+    removeEspacios(name);
+
+    system("cls");
+    system("pause");
+}
+
+void fecha(char day[], char month[], char year[])
 {
     int bi = FALSE;
+    int iyear, iday, imonth;
 
     printf("FECHA DE NACIMIENTO\n");
-    perso.fecha.year = validar("AÑO DE NACIMIENTO (CUATRO DIGITOS): ", 1893, 2023);
+    iyear = validar("AÑO DE NACIMIENTO (CUATRO DIGITOS): ", 1893, 2023);
+    snprintf(year, sizeof(year), "%d", iyear);
+
     system("cls");
-    if ((perso.fecha.year % 4 == 0 && perso.fecha.year % 100 != 0) || (perso.fecha.year % 400 == 0))
+    if ((iyear % 4 == 0 && iyear % 100 != 0) || (iyear % 400 == 0))
     {
         bi = TRUE;
     }
@@ -128,34 +147,35 @@ Todo fecha(Todo perso)
     meses();
     do
     {
-        perso.fecha.month = validar("ELIGE EL NUMERO DE TU MES: ", 1, 12);
-    } while (perso.fecha.year == 2023 && perso.fecha.month > 10);
+       imonth = validar("ELIGE EL NUMERO DE TU MES: ", 1, 12);
+    } while (iyear == 2023 && imonth > 10);
+    snprintf(month, sizeof(month), "%d", imonth);
     system("cls");
-    if (perso.fecha.month == 2)
+    if (imonth == 2)
     {
         if (bi == TRUE)
         {
-            perso.fecha.day = validar("INGRESA EL DIA DE NACIMIENTO (DOS DIGITOS): ", 1, 29);
+           iday = validar("INGRESA EL DIA DE NACIMIENTO (DOS DIGITOS): ", 1, 29);
         }
         else
         {
-            perso.fecha.day = validar("INGRESA EL DIA DE NACIMIENTO (DOS DIGITOS): ", 1, 28);
+            iday = validar("INGRESA EL DIA DE NACIMIENTO (DOS DIGITOS): ", 1, 28);
         }
     }
     else
     {
-        if (perso.fecha.month == 4 || perso.fecha.month == 6 || perso.fecha.month == 9 || perso.fecha.month == 11)
+        if (imonth == 4 || imonth == 6 || imonth == 9 || imonth == 11)
         {
-            perso.fecha.day = validar("INGRESA TU DIA DE NACIMIENTO (DOS DIGITOS): ", 1, 30);
+            iday = validar("INGRESA TU DIA DE NACIMIENTO (DOS DIGITOS): ", 1, 30);
         }
         else
         {
-            perso.fecha.day = validar("INGRESA TU DIA DE NACIMIENTO (DOS DIGITOS): ", 1, 31);
+            iday = validar("INGRESA TU DIA DE NACIMIENTO (DOS DIGITOS): ", 1, 31);
         }
     }
+    snprintf(day, sizeof(day), "%d", iday);
 
     system("cls");
-    return perso;
 }
 
 void meses()

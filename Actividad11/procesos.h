@@ -26,6 +26,7 @@ char buscavocal(char cad[]);
 char buscaCons(char cad[]);
 void validU(char cad[]);
 void eliminarPrepo(char cadena[], char preposiciones[][5]);
+char primeraLetra(char *cadena);
 
 // Valida la entrada del usuario en un rango de numeros
 int validar(char msg[], int ri, int rf)
@@ -380,4 +381,14 @@ int nrand(int ri, int rf)
     int rango;
     rango = (rf - ri + 1);
     return rand() % rango + ri;
+}
+
+char primeraLetra(char *cadena) {
+    while (*cadena) {
+        if ((*cadena >= 'A' && *cadena <= 'Z') || (*cadena >= 'a' && *cadena <= 'z')) {
+            return *cadena;
+        }
+        cadena++;
+    }
+    return '\0'; 
 }
