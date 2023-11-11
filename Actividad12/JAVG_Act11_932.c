@@ -77,7 +77,7 @@ void menu()
         printf("\n \t MENU");
         printf("\n1. CARGAR ARCHIVO (1 sola vez)");      // TODO: logrado
         printf("\n2. AGREGAR (10)");                     // TODO: logrado
-        printf("\n3. ELIMINAR");                         //! PENDIENTE
+        printf("\n3. ELIMINAR");                         //! PENDIENTE AGREGA LO DE ACTUALZIAR EL ARCHIVO
         printf("\n4. BUSCAR");                           // TODO: logrado
         printf("\n5. ORDENAR");                          // TODO: logrado
         printf("\n6. MOSTRAR TODO");                     //! PENDIENTE
