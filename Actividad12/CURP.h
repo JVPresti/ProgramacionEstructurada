@@ -4,6 +4,37 @@
 #define TRUE 1
 #define FALSE 0
 
+// Definicion de estructuras
+typedef long Tkey;
+
+typedef struct _nom
+{
+    char name[30];
+    char name2[30];
+    char apPat[30];
+    char apMat[30];
+} Tname;
+
+typedef struct _fecha
+{
+    char day[3];
+    char month[3];
+    char year[5];
+    int edad;
+} Tfecha;
+
+typedef struct _personas
+{
+    int status;
+    Tkey key;
+    int matri;
+    Tname name;
+    Tfecha fecha;
+    char sexo[11];
+    int state;
+    char curp[19];
+} Todo; // Nueva manera de identificarlo
+
 void curpmain(char name[], char name2[], char apPat[], char apMat[], char state[], char sexo[], char day[], char month[], char year[], char curp[], Todo alum[], int alumnos);
 void curpMainRand(char name[], char apPat[], char apMat[], int state, char sexo[], int day, int month, int year, char curp[]);
 void genData(char name[], char name2[], char apPat[], char apMat[]);

@@ -7,37 +7,6 @@
 #include "curp.h"
 #define N 1500
 
-// Definicion de estructuras
-typedef long Tkey;
-
-typedef struct _nom
-{
-    char name[30];
-    char name2[30];
-    char apPat[30];
-    char apMat[30];
-} Tname;
-
-typedef struct _fecha
-{
-    char day[3];
-    char month[3];
-    char year[5];
-    int edad;
-} Tfecha;
-
-typedef struct _personas
-{
-    int status;
-    Tkey key;
-    int matri;
-    Tname name;
-    Tfecha fecha;
-    char sexo[11];
-    int state;
-    char curp[19];
-} Todo; // Nueva manera de identificarlo
-
 // Declaracion de prototipos de funciones
 void menu();
 void imprimir(Todo vect[], int n);
@@ -50,8 +19,11 @@ bool ordVectQuick(Todo vect[]);
 int compararEnteros(const void *a, const void *b);
 void archivo(Todo vect[], int n, char nom2[]);
 void impriOne(Todo alum);
-int readFile(Todo vect[], int i, char nom[]);
+int readFile(Todo vect[], int *i, char nom[]);
 void addData(Todo alum[], int alumnos, char nom[]);
+void archivoBorrados(Todo vect[], int n);
+void archivoActPrin(Todo vect[], int n);
+int contar(char name[], int con);
 
 // Funcion main
 int main()
@@ -64,8 +36,8 @@ int main()
 // Funcion que depende la opcion del usuario llama a las funciones necesarias para llevar a cabo el proceso
 void menu()
 {
-    int op, i, j, alumnos = 0, matri, op1 = FALSE;
-    char nom2[30];
+    int op, i, j, alumnos = 0, matri, op1 = FALSE, con, total = 0;
+    char nom2[30], name[30];
     bool band;
     Todo alum[N]; // Un solo alumno
     Todo vect[N]; // El vector donde se guarda toda la informacion
@@ -75,13 +47,13 @@ void menu()
     {
 
         printf("\n \t MENU");
-        printf("\n1. CARGAR ARCHIVO (1 sola vez)");      // TODO: logrado
+        printf("\n1. CARGAR ARCHIVO (1 sola vez)");      //! NO JALA
         printf("\n2. AGREGAR (10)");                     // TODO: logrado
-        printf("\n3. ELIMINAR");                         //! PENDIENTE AGREGA LO DE ACTUALZIAR EL ARCHIVO
+        printf("\n3. ELIMINAR");                         // TODO: logrado
         printf("\n4. BUSCAR");                           // TODO: logrado
         printf("\n5. ORDENAR");                          // TODO: logrado
-        printf("\n6. MOSTRAR TODO");                     //! PENDIENTE
-        printf("\n7. GENERAR ARCHIVO");                  // TODO: logrado pero agregar putc
+        printf("\n6. MOSTRAR TODO");                     // TODO: logrado
+        printf("\n7. GENERAR ARCHIVO");                  // TODO: logrado
         printf("\n8. CANTIDAD DE REGISTROS EN ARCHIVO"); //! PENDIENTE
         printf("\n9. MOSTRAR BORRADOS");                 //! PENDIENTE
         printf("\n0. SALIR");                            // TODO: logrado
@@ -90,16 +62,16 @@ void menu()
         switch (op)
         {
         case 1:
-            op1 = TRUE;
-            if (!op)
+            if (!op1)
             {
-                alumnos = readFile(vect, alumnos, "datos.txt");
+                readFile(vect, &alumnos, "datos.txt");
             }
             else
             {
                 printf("Ya se ha cargado el archivo\n");
                 system("pause");
             }
+            op1 = TRUE;
             break;
         case 2:
             if ((alumnos + 10) <= N) // Esto es para llenar 10 registros solamente, siempre y cuando no superen el limite
@@ -135,14 +107,16 @@ void menu()
                 if (vect[i].status != 0) // Si el estatus es 1 es porque si estaba activo
                 {
                     vect[i].status = 0;
-                    impriOne(alum[i])
-                        printf("Se ha eliminado la matricula \n");
+                    impriOne(vect[i]);
+                    printf("Se ha eliminado la matricula \n");
                     system("pause");
+                    archivoBorrados(vect, i);
+                    archivoActPrin(vect, i);
                 }
                 else
                 {
-                    impriOne(alum[i])
-                        printf("Ya se encuentra inactivo\n");
+                    impriOne(vect[i]);
+                    printf("Ya se encuentra inactivo\n");
                     system("pause");
                 }
             }
@@ -191,17 +165,32 @@ void menu()
             }
             break;
         case 6:
-            imprimir(alum, alumnos); //! PENDIENTE DE MODIFICAR
+            imprimir(vect, alumnos);
             break;
         case 7:
-            system("cls")
-                printf("INGRESE EL NOMBRE QUE DESEA PARA EL ARCHIVO: (NO AGREGUE EXTENSIONES)");
+            system("cls");
+            printf("INGRESE EL NOMBRE QUE DESEA PARA EL ARCHIVO: (NO AGREGUE EXTENSIONES): ");
             fflush(stdin);
             gets(nom2);
             archivo(vect, alumnos, nom2);
             break;
         case 8:
-            //! ME FALTA AGREGAR TODO ESTE
+            con = validar("Ingrese el archivo que desea contar: (1. Activos    2. Borrados): ", 1, 2);
+            printf("Ingrese el nombre del archivo (NO AGREGUE EXTENSIONES): ");
+            fflush(stdin);
+            gets(name);
+
+            total = contar(name, con);
+            if (total == -1)
+            {
+                printf("No se ha encontrado el archivo\n");
+            }
+            else
+            {
+                printf("El archivo tiene %d registros\n", total);
+                system("pause");
+            }
+
             break;
         case 9:
             //! ME FALTA AGREGAR TODO ESTE
@@ -217,7 +206,7 @@ void menu()
     } while (op != 0); // Cuando es 0 el programa termina
 }
 
-int readFile(Todo vect[], int i, char nom[])
+/*int readFile(Todo vect[], int *i, char nom[])
 {
     Todo reg;
     FILE *fa;
@@ -230,38 +219,87 @@ int readFile(Todo vect[], int i, char nom[])
     }
     else
     {
-        while (!feof(fa))
+        while (fscanf(fa, "%d %d %s %s %s %d %s", &x, &reg.matri, reg.name.name, reg.name.apPat, reg.name.apMat, &reg.fecha.edad, reg.sexo) == 7)
         {
-            fscanf(fa, "%d %d %s %s %s %d %s", &x, &reg.matri, &reg.name.name, &reg.name.apPat, &reg.name.apMat, &reg.fecha.edad, &reg.sexo);
-            vect[i] = reg;
-            i++;
+            if ((*i) < N)
+            {
+                vect[(*i)++] = reg;
+            }
+            else
+            {
+                printf("Se ha llegado al límite\n");
+                return 1;
+            }
         }
         fclose(fa);
     }
-    return i;
+}*/
+int readFile(Todo vect[], int *i, char nom[])
+{
+    Todo reg;
+    FILE *fa;
+    int x;
+
+    fa = fopen(nom, "r");
+    if (fa == NULL)
+    {
+        printf("Error al abrir el archivo: %s\n", nom);
+        system("pause");
+        return 0;
+    }
+    else
+    {
+        while (fscanf(fa, "%d %d %s %s %s %d %s", &x, &reg.matri, reg.name.name, reg.name.apPat, reg.name.apMat, &reg.fecha.edad, reg.sexo) == 7)
+        {
+            if ((*i) < N)
+            {
+                vect[(*i)++] = reg;
+            }
+            else
+            {
+                printf("Advertencia: Se ha alcanzado el límite del tamaño del array\n");
+                break;
+            }
+        }
+        printf("Se han leido %d registros\n", *i);
+        system("pause");
+        fclose(fa);
+        return 1;
+    }
 }
 
 // Esta funcion imprime los registros
 void imprimir(Todo vect[], int n)
 {
-    int i;
+    int i, on = 0, op;
+
     system("CLS");
-    printf("MATRICULA   NOMBRE    \t\t   APPAT      \t\t    APMAT  \t\t      EDAD \t \t\t CURP\t\t SEXO  \n");
+    printf("------------------------------------------------------------------------------------------\n");
+    printf("  No  | MATRICULA | NOMBRE        | APELLIDO P.  |  APELLIDO MAT.     | EDAD  | SEXO \n");
+    printf("------------------------------------------------------------------------------------------\n");
     for (i = 0; i < n; i++)
     {
         if (vect[i].status != 0) // Esto es para que solo imprima a los que tienen estatus 1
         {
-            printf("%-9d   %-20s   %-20s   %-20s   %-4s/%-4s/%-4s \t %-4s  ", vect[i].matri, vect[i].name.name, vect[i].name.apPat, vect[i].name.apMat, vect[i].fecha.day, vect[i].fecha.month, vect[i].fecha.year, vect[i].curp); // Imprime todos los datos
-            if (strcmp(vect[i].sexo, "H"))
+            printf("%4d.-  %6d      %-10s      %-10s      %-10s          %2d      %-7s\n", on, vect[i].matri, vect[i].name.name, vect[i].name.apPat, vect[i].name.apMat, vect[i].fecha.edad, vect[i].sexo); // Imprime todos los datos
+            on++;
+        }
+
+        if ((on) % 40 == 0 && on < n)
+        {
+            op = validar("\nDesea imprimir mas? 1. Si\n2. No  ", 1, 2);
+
+            if (op == 1)
             {
-                printf("HOMBRE\n");
-            }
-            else
-            {
-                printf("MUJER\n");
+                system("CLS");
+                printf("Registros %d - %d\n\n", on + 1, (on + 40) > n ? n : (on + 40));
+                printf("------------------------------------------------------------------------------------------\n");
+                printf("  No  | MATRICULA | NOMBRE        | APELLIDO P.  |  APELLIDO MAT.     | EDAD  | SEXO \n");
+                printf("------------------------------------------------------------------------------------------\n");
             }
         }
     }
+    archivoActPrin(vect, n);
     system("pause");
 }
 
@@ -353,7 +391,7 @@ Todo genAlumRan(Todo *alum, int alumnos, char nom[])
         strcpy(alum[alumnos].name.name, nameM[nrand(0, 19)]);
     }
 
-    year = rand() % (2023 - 1900 + 1) + 1900;
+    year = rand() % (2023 - 1943 + 1) + 1943;
     snprintf(alum[alumnos].fecha.year, sizeof(alum[alumnos].fecha.year), "%d", year);
 
     if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
@@ -431,7 +469,7 @@ Todo genAlumRan(Todo *alum, int alumnos, char nom[])
     // printf("%s ", alum[alumnos].name.name);
     // system("pause");
 
-    adddata(alum, alumnos nom);
+    addData(alum, alumnos, nom);
 
     return alum[alumnos];
 }
@@ -525,11 +563,58 @@ void archivo(Todo vect[], int n, char nom2[])
     {
         if (vect[i].status != 0)
         {
-            fprintf(fa, "%-9d   %-15s   %-10s   %-10s   %-4d \t %-4s  %s\n", vect[i].matri, vect[i].name.name, vect[i].name.apPat, vect[i].name.apMat, vect[i].fecha.edad, vect[i].sexo);
+            fprintf(fa, "%-9d   %-15s   %-10s   %-10s   %-4d \t %-4s\n", vect[i].matri, vect[i].name.name, vect[i].name.apPat, vect[i].name.apMat, vect[i].fecha.edad, vect[i].sexo);
         }
     }
 
     printf("Archivo escrito con exito");
     fclose(fa);
     system("pause");
+}
+
+void archivoBorrados(Todo vect[], int n)
+{
+    int i;
+    FILE *fa;
+    fa = fopen("borrados.txt", "w");
+    fprintf(fa, "MATRICULA   NOMBRE         APPAT         APMAT          EDAD \t \t\t SEXO  \n");
+    for (i = 0; i <= n; i++)
+    {
+        if (vect[i].status == 0)
+        {
+            fprintf(fa, "%-9d   %-15s   %-10s   %-10s   %-4d \t %-4s\n", vect[i].matri, vect[i].name.name, vect[i].name.apPat, vect[i].name.apMat, vect[i].fecha.edad, vect[i].sexo);
+        }
+    }
+
+    printf("Archivo escrito con exito");
+    fclose(fa);
+    system("pause");
+}
+
+void archivoActPrin(Todo vect[], int n)
+{
+    int i;
+    FILE *fa;
+    fa = fopen("Activos.txt", "w");
+    fprintf(fa, "MATRICULA   NOMBRE         APPAT         APMAT          EDAD \t \t\t SEXO  \n");
+    for (i = 0; i < n; i++)
+    {
+        if (vect[i].status != 0)
+        {
+            fprintf(fa, "%-9d   %-15s   %-10s   %-10s   %-4d \t %-4s\n", vect[i].matri, vect[i].name.name, vect[i].name.apPat, vect[i].name.apMat, vect[i].fecha.edad, vect[i].sexo);
+        }
+    }
+    fclose(fa);
+}
+
+int contar(char name[], int con)
+{
+    int i;
+    char cmd[30];
+
+    system("gcc contador.c -o contador.exe");
+    sprintf(cmd, "contador.exe %s %d", name, con);
+    i = system(cmd);
+
+    return i - 2;
 }
