@@ -24,6 +24,7 @@ void addData(Todo alum[], int alumnos, char nom[]);
 void archivoBorrados(Todo vect[], int n);
 void archivoActPrin(Todo vect[], int n);
 int contar(char name[], int con);
+void imprimirBorrados(Todo vect[], int n);
 
 // Funcion main
 int main()
@@ -54,8 +55,8 @@ void menu()
         printf("\n5. ORDENAR");                          // TODO: logrado
         printf("\n6. MOSTRAR TODO");                     // TODO: logrado
         printf("\n7. GENERAR ARCHIVO");                  // TODO: logrado
-        printf("\n8. CANTIDAD DE REGISTROS EN ARCHIVO"); //! PENDIENTE
-        printf("\n9. MOSTRAR BORRADOS");                 //! PENDIENTE
+        printf("\n8. CANTIDAD DE REGISTROS EN ARCHIVO"); // TODO: logrado
+        printf("\n9. MOSTRAR BORRADOS");                 // TODO: logrado
         printf("\n0. SALIR");                            // TODO: logrado
         op = validar("\n INGRESA UNA OPCION: \n", 0, 9); // Valida las opciones
 
@@ -64,7 +65,7 @@ void menu()
         case 1:
             if (!op1)
             {
-                readFile(vect, &alumnos, "datos.txt");
+                readFile(vect, &i, "datos.txt");
             }
             else
             {
@@ -193,9 +194,12 @@ void menu()
 
             break;
         case 9:
-            //! ME FALTA AGREGAR TODO ESTE
+            imprimirBorrados(vect, alumnos);
             break;
         case 0:
+            archivo(vect, alumnos, "datos.txt");
+            archivoActPrin(vect, alumnos);
+            archivoBorrados(vect, alumnos);
             printf("Hasta luego....\n");
             system("pause");
             break;
@@ -206,7 +210,7 @@ void menu()
     } while (op != 0); // Cuando es 0 el programa termina
 }
 
-/*int readFile(Todo vect[], int *i, char nom[])
+int readFile(Todo vect[], int *i, char nom[])
 {
     Todo reg;
     FILE *fa;
@@ -232,39 +236,6 @@ void menu()
             }
         }
         fclose(fa);
-    }
-}*/
-int readFile(Todo vect[], int *i, char nom[])
-{
-    Todo reg;
-    FILE *fa;
-    int x;
-
-    fa = fopen(nom, "r");
-    if (fa == NULL)
-    {
-        printf("Error al abrir el archivo: %s\n", nom);
-        system("pause");
-        return 0;
-    }
-    else
-    {
-        while (fscanf(fa, "%d %d %s %s %s %d %s", &x, &reg.matri, reg.name.name, reg.name.apPat, reg.name.apMat, &reg.fecha.edad, reg.sexo) == 7)
-        {
-            if ((*i) < N)
-            {
-                vect[(*i)++] = reg;
-            }
-            else
-            {
-                printf("Advertencia: Se ha alcanzado el límite del tamaño del array\n");
-                break;
-            }
-        }
-        printf("Se han leido %d registros\n", *i);
-        system("pause");
-        fclose(fa);
-        return 1;
     }
 }
 
@@ -300,6 +271,40 @@ void imprimir(Todo vect[], int n)
         }
     }
     archivoActPrin(vect, n);
+    system("pause");
+}
+
+void imprimirBorrados(Todo vect[], int n)
+{
+    int i, on = 0, op;
+
+    system("CLS");
+    printf("------------------------------------------------------------------------------------------\n");
+    printf("  No  | MATRICULA | NOMBRE        | APELLIDO P.  |  APELLIDO MAT.     | EDAD  | SEXO \n");
+    printf("------------------------------------------------------------------------------------------\n");
+    for (i = 0; i < n; i++)
+    {
+        if (vect[i].status == 0) // Esto es para que solo imprima a los que tienen estatus 0
+        {
+            printf("%4d.-  %6d      %-10s      %-10s      %-10s          %2d      %-7s\n", on, vect[i].matri, vect[i].name.name, vect[i].name.apPat, vect[i].name.apMat, vect[i].fecha.edad, vect[i].sexo); // Imprime todos los datos
+            on++;
+        }
+
+        if ((on) % 40 == 0 && on < n)
+        {
+            op = validar("\nDesea imprimir mas? 1. Si\n2. No  ", 1, 2);
+
+            if (op == 1)
+            {
+                system("CLS");
+                printf("Registros %d - %d\n\n", on + 1, (on + 40) > n ? n : (on + 40));
+                printf("------------------------------------------------------------------------------------------\n");
+                printf("  No  | MATRICULA | NOMBRE        | APELLIDO P.  |  APELLIDO MAT.     | EDAD  | SEXO \n");
+                printf("------------------------------------------------------------------------------------------\n");
+            }
+        }
+    }
+    archivoBorrados(vect, n);
     system("pause");
 }
 

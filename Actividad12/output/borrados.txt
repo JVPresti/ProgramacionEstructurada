@@ -1,0 +1,3 @@
+MATRICULA   NOMBRE         APPAT         APMAT          EDAD 	 		 SEXO  
+318147      ALEX              PEREZ        GOMEZ        7    	 MASCULINO
+0                                                       0    	     
