@@ -48,16 +48,16 @@ void menu()
     {
 
         printf("\n \t MENU");
-        printf("\n1. CARGAR ARCHIVO (1 sola vez)");      //! NO JALA
-        printf("\n2. AGREGAR (10)");                     // TODO: logrado
-        printf("\n3. ELIMINAR");                         // TODO: logrado
-        printf("\n4. BUSCAR");                           // TODO: logrado
-        printf("\n5. ORDENAR");                          // TODO: logrado
-        printf("\n6. MOSTRAR TODO");                     // TODO: logrado
-        printf("\n7. GENERAR ARCHIVO");                  // TODO: logrado
-        printf("\n8. CANTIDAD DE REGISTROS EN ARCHIVO"); // TODO: logrado
-        printf("\n9. MOSTRAR BORRADOS");                 // TODO: logrado
-        printf("\n0. SALIR");                            // TODO: logrado
+        printf("\n1. CARGAR ARCHIVO (1 sola vez)");
+        printf("\n2. AGREGAR (10)");
+        printf("\n3. ELIMINAR");
+        printf("\n4. BUSCAR");
+        printf("\n5. ORDENAR");
+        printf("\n6. MOSTRAR TODO");
+        printf("\n7. GENERAR ARCHIVO");
+        printf("\n8. CANTIDAD DE REGISTROS EN ARCHIVO");
+        printf("\n9. MOSTRAR BORRADOS");
+        printf("\n0. SALIR");
         op = validar("\n INGRESA UNA OPCION: \n", 0, 9); // Valida las opciones
 
         switch (op)
