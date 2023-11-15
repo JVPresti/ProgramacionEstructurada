@@ -5,6 +5,8 @@
 
 #include "procesos.h"
 #define N 5000
+#define TRUE 1
+#define FALSE 0
 
 typedef long Tkey;
 
@@ -65,7 +67,7 @@ int main()
 // Funcion que depende la opcion del usuario llama a las funciones necesarias para llevar a cabo el proceso
 void menu()
 {
-    int op, i, j, alumnos = 0, matri, op1 = FALSE, con, total = 0, opEdit, max=0, new, bandCar=FALSE;
+    int op, i, j, alumnos = 0, matri, op1 = FALSE, con, total = 0, opEdit, max = 0, new, bandCar = FALSE;
     char nom2[30], name[30];
     bool band;
     Todo alum[N]; // Un solo alumno
@@ -84,8 +86,8 @@ void menu()
         printf("\n6. IMPRIMIR");                 // TODO: LOGRADO
         printf("\n7. GENERAR ARCHIVO DE TEXTO"); // TODO: LOGRADO
         printf("\n8. VER ARCHIVO DE TEXTO");     //! no entendi bien
-        printf("\n9. CREAR ARCHIVO BINARIO");    // TODO: LOGRADO
-        printf("\n10. CARGAR ARCHIVO BINARIO");
+        printf("\n9. CREAR ARCHIVO BINARIO");    // TODO: LOGRADO pero falta respaldar
+        printf("\n10. CARGAR ARCHIVO BINARIO");  // TODO: LOGRADO
         printf("\n11. MOSTRAR ELIMINADOS");
         printf("\n0. SALIR");                             // TODO: LOGRADO
         op = validar("\n INGRESA UNA OPCION: \n", 0, 11); // Valida las opciones
@@ -276,21 +278,23 @@ void menu()
             archivoBin(vect, alumnos, nom2);
             break;
         case 10:
-            if(bandCar==FALSE){
-            max=sizeof(vect)/sizeof(vect[0]);
-            new=cargarBin(vect, alumnos, max);
-            alumnos=new;
-            band=TRUE;
+            if (bandCar == FALSE)
+            {
+                max = sizeof(vect) / sizeof(vect[0]);
+                new = cargarBin(vect, alumnos, max);
+                alumnos = new;
+                band = TRUE;
             }
-            else{
+            else
+            {
                 printf("Ya se ha cargado el archivo\n");
                 system("pause");
             }
             break;
+        case 11:
+
+            break;
         case 0:
-            archivo(vect, alumnos, "datos.txt");
-            archivoActPrin(vect, alumnos);
-            archivoBorrados(vect, alumnos);
             printf("Hasta luego....\n");
             system("pause");
             break;
@@ -697,7 +701,8 @@ int archivoBin(Todo vect[], int n, char nom2[])
     return 0;
 }
 
-int cargarBin(Todo vect[], int n, int max){
+int cargarBin(Todo vect[], int n, int max)
+{
     int i;
     FILE *fa;
     fa = fopen("datos.dll", "ba");
@@ -710,10 +715,12 @@ int cargarBin(Todo vect[], int n, int max){
     {
         while (fread(&vect[i], sizeof(Todo), 1, fa) == 1)
         {
-            if(i<max){
-            vect[i++]=vect[i];
+            if (i < max)
+            {
+                vect[i++] = vect[i];
             }
-            else{
+            else
+            {
                 printf("Se ha llegado al limite\n");
                 return i;
             }
