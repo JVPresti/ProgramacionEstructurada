@@ -53,8 +53,8 @@ void addData(Todo alum[], int alumnos, char nom[]);
 void archivoBorrados(Todo vect[], int n);
 void archivoActPrin(Todo vect[], int n);
 void imprimirBorrados(Todo vect[], int n);
-int archivoBin(Todo vect[], int n, char nom2[]);
-int cargarBin(Todo vect[], int n, int max);
+void archivoBin(Todo vect[], int n);
+int cargarBin(Todo vect[], int n);
 
 // Funcion main
 int main()
@@ -67,8 +67,8 @@ int main()
 // Funcion que depende la opcion del usuario llama a las funciones necesarias para llevar a cabo el proceso
 void menu()
 {
-    int op, i, j, alumnos = 0, matri, op1 = FALSE, con, total = 0, opEdit, max = 0, new, bandCar = FALSE;
-    char nom2[30], name[30];
+    int op, i, j, alumnos = 0, matri, op1 = FALSE, opEdit, new, bandCar = FALSE;
+    char nom2[30];
     bool band;
     Todo alum[N]; // Un solo alumno
     Todo vect[N]; // El vector donde se guarda toda la informacion
@@ -78,17 +78,17 @@ void menu()
     {
 
         printf("\n \t MENU");
-        printf("\n1. AGREGAR AUTOMATICO (100)"); // TODO: LOGRADO
-        printf("\n2. EDITAR REGISTRO");          // TODO: LOGRADO
-        printf("\n3. ELIMINAR REGISTRO");        // TODO: LOGRADO
-        printf("\n4. BUSCAR");                   // TODO: LOGRADO
-        printf("\n5. ORDENAR");                  // TODO: LOGRADO
-        printf("\n6. IMPRIMIR");                 // TODO: LOGRADO
-        printf("\n7. GENERAR ARCHIVO DE TEXTO"); // TODO: LOGRADO
-        printf("\n8. VER ARCHIVO DE TEXTO");     //! no entendi bien
-        printf("\n9. CREAR ARCHIVO BINARIO");    // TODO: LOGRADO pero falta respaldar
-        printf("\n10. CARGAR ARCHIVO BINARIO");  // TODO: LOGRADO
-        printf("\n11. MOSTRAR ELIMINADOS");
+        printf("\n1. AGREGAR AUTOMATICO (100)");          // TODO: LOGRADO
+        printf("\n2. EDITAR REGISTRO");                   // TODO: LOGRADO
+        printf("\n3. ELIMINAR REGISTRO");                 // TODO: LOGRADO
+        printf("\n4. BUSCAR");                            // TODO: LOGRADO
+        printf("\n5. ORDENAR");                           // TODO: LOGRADO
+        printf("\n6. IMPRIMIR");                          // TODO: LOGRADO
+        printf("\n7. GENERAR ARCHIVO DE TEXTO");          // TODO: LOGRADO
+        printf("\n8. VER ARCHIVO DE TEXTO");              // TODO: LOGRADO
+        printf("\n9. CREAR ARCHIVO BINARIO");             // TODO: LOGRADO
+        printf("\n10. CARGAR ARCHIVO BINARIO");           // TODO: LOGRADO
+        printf("\n11. MOSTRAR ELIMINADOS");               // TODO: LOGRADO
         printf("\n0. SALIR");                             // TODO: LOGRADO
         op = validar("\n INGRESA UNA OPCION: \n", 0, 11); // Valida las opciones
 
@@ -126,7 +126,7 @@ void menu()
             if (i != -1 && vect[i].status != 0)
             {
                 impriOne(vect[i]);
-                opEdit = ("Ingrese el campo a editar (1-8): ", 1, 8);
+                opEdit = validar("Ingrese el campo a editar (1-8): ", 1, 8);
                 switch (opEdit)
                 {
                 case 1:
@@ -136,7 +136,8 @@ void menu()
                     do
                     {
                         vect[i].matri = validar("Ingrese la nueva matricula: ", 300000, 399999);
-                    } while (busqSeqMatricula(vect, alumnos, vect[i].matri) != -1);
+                        vect[i].key = vect[i].matri;
+                    } while (busqSeqMatricula(vect, alumnos, vect[i].matri) == -1);
                     break;
                 case 3:
                     printf("Ingrese el nuevo nombre: ");
@@ -254,36 +255,24 @@ void menu()
             archivo(vect, alumnos, nom2);
             break;
         case 8:
-            con = validar("Ingrese el archivo que desea contar: (1. Activos    2. Borrados): ", 1, 2);
             printf("Ingrese el nombre del archivo (NO AGREGUE EXTENSIONES): ");
             fflush(stdin);
-            gets(name);
+            gets(nom2);
 
-            total = contar(name, con);
-            if (total == -1)
-            {
-                printf("No se ha encontrado el archivo\n");
-            }
-            else
-            {
-                printf("El archivo tiene %d registros\n", total);
-                system("pause");
-            }
+            printf("nose");
+            imprimir(vect, alumnos);
 
             break;
         case 9:
-            printf("Ingrese el nombre del archivo binario (NO AGREGUE EXTENSIONES): ");
-            fflush(stdin);
-            gets(nom2);
-            archivoBin(vect, alumnos, nom2);
+            archivoBin(vect, alumnos);
+            printf("Se ha creado el archivo binario\n");
             break;
         case 10:
             if (bandCar == FALSE)
             {
-                max = sizeof(vect) / sizeof(vect[0]);
-                new = cargarBin(vect, alumnos, max);
+                new = cargarBin(vect, alumnos);
                 alumnos = new;
-                band = TRUE;
+                bandCar = TRUE;
             }
             else
             {
@@ -292,7 +281,7 @@ void menu()
             }
             break;
         case 11:
-
+            imprimirBorrados(vect, alumnos);
             break;
         case 0:
             printf("Hasta luego....\n");
@@ -332,6 +321,7 @@ int readFile(Todo vect[], int *i, char nom[])
         }
         fclose(fa);
     }
+    return 0;
 }
 
 // Esta funcion imprime los registros
@@ -379,7 +369,7 @@ void imprimirBorrados(Todo vect[], int n)
     printf("------------------------------------------------------------------------------------------\n");
     for (i = 0; i < n; i++)
     {
-        if (vect[i].status == 0) // Esto es para que solo imprima a los que tienen estatus 0
+        if (vect[i].key != 1) // Esto es para que solo imprima a los que tienen estatus 0
         {
             printf("%4d.-  %6d      %-10s      %-10s      %-10s          %2d      %-7s\n", on, vect[i].matri, vect[i].name.name, vect[i].name.apPat, vect[i].name.apMat, vect[i].fecha.edad, vect[i].sexo); // Imprime todos los datos
             on++;
@@ -684,28 +674,12 @@ void archivoActPrin(Todo vect[], int n)
     fclose(fa);
 }
 
-int archivoBin(Todo vect[], int n, char nom2[])
+void archivoBin(Todo vect[], int n)
 {
-    int i;
     FILE *fa;
-    strcat(nom2, ".dll");
-    fa = fopen(nom2, "ba");
-    for (i = 0; i < n; i++)
-    {
-        fwrite(&vect[i], sizeof(Todo), 1, fa);
-    }
-
-    printf("Archivo escrito con exito");
-    fclose(fa);
-    system("pause");
-    return 0;
-}
-
-int cargarBin(Todo vect[], int n, int max)
-{
-    int i;
-    FILE *fa;
-    fa = fopen("datos.dll", "ba");
+    char nom[11] = "datos.dll";
+    rename("datos.dll", "datos.tmp");
+    fa = fopen(nom, "wb");
     if (fa == NULL)
     {
         printf("No se ha encontrado el archivo\n");
@@ -713,19 +687,32 @@ int cargarBin(Todo vect[], int n, int max)
     }
     else
     {
-        while (fread(&vect[i], sizeof(Todo), 1, fa) == 1)
+        fwrite(vect, sizeof(Todo), n, fa);
+        fclose(fa);
+    }
+}
+
+int cargarBin(Todo vect[], int n)
+{
+    int i = 0;
+    FILE *fa;
+    fa = fopen("datos.dll", "rb");
+    if (fa == NULL)
+    {
+        printf("No se ha encontrado el archivo\n");
+        system("pause");
+    }
+    else
+    {
+        while (fread(&vect[i], sizeof(Todo), 1, fa) == 1 && n < N)
         {
-            if (i < max)
-            {
-                vect[i++] = vect[i];
-            }
-            else
-            {
-                printf("Se ha llegado al limite\n");
-                return i;
-            }
+            vect[i].status = nrand(0, 1);
+            vect[i].key = vect[i].matri;
+            i++;
         }
         fclose(fa);
+        printf("El archivo se ha cargado con exito\n");
+        system("pause");
     }
     return i;
 }
