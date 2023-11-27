@@ -12,7 +12,7 @@
 void menu();
 void imprimir(TWrkr vect[], int n);
 void imprimirIn(Tindex vect[], int n);
-Tindex genAlumRan(Tindex *alum, int alumnos, char nom[]);
+Tindex genAlumRan(Tindex alum[], int alumnos);
 int busqSeqMatricula(TWrkr index[], int n, int matri);
 int busqBin(TWrkr vect[], int n, int matri);
 bool ordVect(Tindex vect[], int n);
@@ -71,7 +71,7 @@ void menu()
         switch (op)
         {
         case 1:
-            genAlumRand(vect, alumnos, nom2); //! PENDIENTE AGREGA EL FOKIN AGREGADO
+            genAlumRan(vect, alumnos); //! PENDIENTE AGREGA EL FOKIN AGREGADO
             break;
         case 2:
             eliminar(vect, alumnos, band);
@@ -410,13 +410,13 @@ int compararEnteros(const void *a, const void *b)
 }
 
 // Esta funcion genera a un alumno de manera aleatoria
-Tindex genAlumRan(Tindex *alum, int alumnos, char nom[])
+Tindex genAlumRan(Tindex alum[], int alumnos)
 {
     char nameH[20][30] = {"RODRIGO", "ERNESTO", "PEDRO", "ISMAEL", "CARLOS", "JUAN", "LUIS", "ANGEL", "ANTONIO", "OMAR", "ISRAEL", "EDGAR", "ARMANDO", "ENRIQUE", "RICARDO", "JAVIER", "ALFREDO", "ALEX", "MIGUEL", "MANUEL"};
     char nameM[20][30] = {"GABRIELA", "ROSARIO", "SOFIA", "TRINIDAD", "GABRIELA", "LUISA", "MONICA", "MELISSA", "JAZMIN", "JANNETH", "DANNA", "LIZETH", "XIMENA", "TALIA", "ESTHER", "ISIS", "LUCIA", "ISABELA", "ISABEL", "ANA"};
     char lastname[40][30] = {"PEREZ", "RODRIGUEZ", "BUSTAMANTE", "GONZALEZ", "VAZQUEZ", "GUZMAN", "FERNANDEZ", "OSUNA", "VILLEGAS", "BUENO", "CORTES", "CORONADO0", "SANCHEZ", "SILVA", "OROZCO", "MARTINEZ", "GOMEZ", "ANDA", "FLORES", "JAUREGUI", "DIAZ", "VALENZUELA", "OCTAVIANO", "MORALES", "RABAGO", "PACHECO", "DUARTE", "DIARTE", "COLOMO", "CASTRO", "MORENO", "TORRES", "ORTIZ", "GUTIERRREZ", "CONCLIN", "ISLAS", "REYES", "CAZARES", "MEDINA", "MELENDEZ"};
     char chambas[10][30] = {"GERENTE", "SECRETARIA", "CAJERO", "VENDEDOR", "REPARTIDOR", "LIMPIADOR", "MESERO", "COCINERO", "GUARDIA", "CHOFER"};
-    char name1[30], apPat[30], apMat[30], curp[19], dayCad[3], monthCad[3], yearCad[3];
+    char name1[30];
     int edad = 0;
     int sex, est, year, month, day, bi = FALSE;
 
