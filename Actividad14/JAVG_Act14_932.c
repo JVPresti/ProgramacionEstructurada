@@ -12,7 +12,7 @@
 void menu();
 void imprimir(TWrkr vect[], int n);
 void imprimirIn(Tindex vect[], int n);
-Tindex genAlumRan(Tindex alum[], int alumnos);
+TWrkr genAlumRan(TWrkr alum[], int alumnos);
 int busqSeqMatricula(TWrkr index[], int n, int matri);
 int busqBin(TWrkr vect[], int n, int matri);
 bool ordVect(Tindex vect[], int n);
@@ -22,7 +22,7 @@ void archivo(TWrkr vect[], int n, char nom2[]);
 void archivoIn(Tindex vect[], int n, char nom2[]);
 void impriOne(TWrkr alum);
 int readFile(Tindex vect[], int *i, char nom[]);
-void addData(Tindex alum[], int alumnos, char nom[]);
+void addData(TWrkr alum[], int alumnos);
 void archivoBorrados(Tindex vect[], int n);
 void archivoActPrin(Tindex vect[], int n);
 void imprimirBorrados(Tindex vect[], int n);
@@ -31,6 +31,7 @@ int cargarBin(Tindex vect[], int n);
 bool cargarIndex(Tindex index[], int *alumnos, TWrkr vect[]);
 void eliminar(TWrkr index[], int alumnos, bool band);
 void buscarReg(Tindex index[], int alumnos, bool band);
+void archivoCopias(TWrkr vect[], int alumnos);
 
 // Funcion main
 int main()
@@ -57,21 +58,21 @@ void menu()
 
         system("CLS");
         printf("\n \t MENU");
-        printf("\n1. AGREGAR");
-        printf("\n2. ELIMINAR");                     // TODO: LOGRADO
-        printf("\n3. BUSCAR");                       // TODO: LOGRADO
-        printf("\n4. ORDENAR");                      // TODO: LOGRADO
-        printf("\n5. IMPRIMIR REGISTROS ORIGINAL");  // TODO: LOGRADO
-        printf("\n6. IMPRIMIR REGISTROS ORDENADO "); // TODO: LOGRADO
-        printf("\n7. CREAR ARCHIVO DE TEXTO");       // TODO: LOGRADO
-        printf("\n8. EMPAQUETAR");
+        printf("\n1. AGREGAR");                          // TODO: LOGRADO
+        printf("\n2. ELIMINAR");                         // TODO: LOGRADO
+        printf("\n3. BUSCAR");                           // TODO: LOGRADO
+        printf("\n4. ORDENAR");                          // TODO: LOGRADO
+        printf("\n5. IMPRIMIR REGISTROS ORIGINAL");      // TODO: LOGRADO
+        printf("\n6. IMPRIMIR REGISTROS ORDENADO ");     // TODO: LOGRADO
+        printf("\n7. CREAR ARCHIVO DE TEXTO");           // TODO: LOGRADO
+        printf("\n8. EMPAQUETAR");                       // TODO: LOGRADO
         printf("\n0. SALIR");                            // TODO: LOGRADO
         op = validar("\n INGRESA UNA OPCION: \n", 0, 8); // Valida las opciones
 
         switch (op)
         {
         case 1:
-            genAlumRan(vect, alumnos); //! PENDIENTE AGREGA EL FOKIN AGREGADO
+            genAlumRan(vect, alumnos);
             break;
         case 2:
             eliminar(vect, alumnos, band);
@@ -127,13 +128,7 @@ void menu()
 
             break;
         case 8:
-            printf("Ingrese el nombre del archivo (NO AGREGUE EXTENSIONES): ");
-            fflush(stdin);
-            gets(nom2);
-
-            printf("nose");
-            imprimir(vect, alumnos);
-
+            archivosCopias(vect, alumnos);
             break;
         case 0:
             printf("Hasta luego....\n");
@@ -195,14 +190,14 @@ void eliminar(TWrkr index[], int alumnos, bool band)
     if (i != -1)
     {
         fa = fopen("datos.dat", "rb+");
-        fseek(fa, index[i].status * sizeof(TWrkr), SEEK_SET);
+        fseek(fa, i * sizeof(TWrkr), SEEK_SET);
         fread(&reg, sizeof(TWrkr), 1, fa);
         impriOne(reg);
         op = validar("\nDesea eliminarlo? 1. Si\n2. No  ", 1, 2);
         if (op == 1)
         {
             reg.status = 0;
-            fseek(fa, index[i].status * sizeof(TWrkr), SEEK_SET);
+            fseek(fa, i * sizeof(TWrkr), SEEK_SET);
             fwrite(&reg, sizeof(TWrkr), 1, fa);
             printf("Se ha eliminado con exito\n");
         }
@@ -410,7 +405,7 @@ int compararEnteros(const void *a, const void *b)
 }
 
 // Esta funcion genera a un alumno de manera aleatoria
-Tindex genAlumRan(Tindex alum[], int alumnos)
+TWrkr genAlumRan(TWrkr alum[], int alumnos)
 {
     char nameH[20][30] = {"RODRIGO", "ERNESTO", "PEDRO", "ISMAEL", "CARLOS", "JUAN", "LUIS", "ANGEL", "ANTONIO", "OMAR", "ISRAEL", "EDGAR", "ARMANDO", "ENRIQUE", "RICARDO", "JAVIER", "ALFREDO", "ALEX", "MIGUEL", "MANUEL"};
     char nameM[20][30] = {"GABRIELA", "ROSARIO", "SOFIA", "TRINIDAD", "GABRIELA", "LUISA", "MONICA", "MELISSA", "JAZMIN", "JANNETH", "DANNA", "LIZETH", "XIMENA", "TALIA", "ESTHER", "ISIS", "LUCIA", "ISABELA", "ISABEL", "ANA"};
@@ -448,17 +443,20 @@ Tindex genAlumRan(Tindex alum[], int alumnos)
 
     alum[alumnos].age = nrand(18, 60);
 
-    //! addData(alum, alumnos, nom);
+    //!
+    addData(alum, alumnos);
+    printf("Se ha agregado con exito\n");
+    system("pause");
 
     return alum[alumnos];
 }
 
 // Agrega los datos al archivo
-void addData(Tindex alum[], int alumnos, char nom[])
+void addData(TWrkr alum[], int alumnos)
 {
     FILE *fa;
     int x = 0;
-    fa = fopen(nom, "a");
+    fa = fopen("datos.dat", "ab");
     if (fa == NULL)
     {
         printf("No se ha encontrado el archivo\n");
@@ -466,7 +464,8 @@ void addData(Tindex alum[], int alumnos, char nom[])
     }
     else
     {
-        fprintf(fa, "%d %d %s %s %s %d %s\n", x, alum[alumnos].enrollment, alum[alumnos].name, alum[alumnos].LastName1, alum[alumnos].LastName2, alum[alumnos].age, alum[alumnos].sex);
+        fseek(fa, 0, SEEK_END);
+        fwrite(&alum[alumnos], sizeof(TWrkr), 1, fa);
         x++;
         fclose(fa);
     }
@@ -548,25 +547,6 @@ void archivoIn(Tindex vect[], int n, char nom2[])
     system("pause");
 }
 
-void archivoBorrados(Tindex vect[], int n)
-{
-    int i;
-    FILE *fa;
-    fa = fopen("borrados.txt", "w");
-    fprintf(fa, "MATRICULA   NOMBRE         APPAT         APMAT          EDAD \t \t\t SEXO  \n");
-    for (i = 0; i <= n; i++)
-    {
-        if (vect[i].status == 0)
-        {
-            fprintf(fa, "%-9d   %-15s   %-10s   %-10s   %-4d \t %-4s\n", vect[i].enrollment, vect[i].name, vect[i].LastName1, vect[i].LastName2, vect[i].age, vect[i].sex);
-        }
-    }
-
-    printf("Archivo escrito con exito");
-    fclose(fa);
-    system("pause");
-}
-
 void archivoBin(Tindex vect[], int n)
 {
     FILE *fa;
@@ -608,4 +588,29 @@ int cargarBin(Tindex vect[], int n)
         system("pause");
     }
     return i;
+}
+
+void archivosCopias(TWrkr vect[], int n)
+{
+    FILE *fa;
+    char nom[11] = "datos.dat";
+    rename("datos.dat", "datos.bak");
+    fa = fopen(nom, "wb");
+    if (fa == NULL)
+    {
+        printf("No se ha encontrado el archivo\n");
+        system("pause");
+    }
+    else
+    {
+        for (int i = 0; i < n; i++)
+        {
+            if (vect[i].status == 1)
+            {
+                fwrite(vect, sizeof(TWrkr), 1, fa);
+            }
+        }
+
+        fclose(fa);
+    }
 }
