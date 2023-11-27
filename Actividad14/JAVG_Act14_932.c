@@ -71,7 +71,7 @@ void menu()
         switch (op)
         {
         case 1:
-
+            genAlumRand(vect, alumnos, nom2); //! PENDIENTE AGREGA EL FOKIN AGREGADO
             break;
         case 2:
             eliminar(vect, alumnos, band);
@@ -195,14 +195,14 @@ void eliminar(TWrkr index[], int alumnos, bool band)
     if (i != -1)
     {
         fa = fopen("datos.dat", "rb+");
-        fseek(fa, index[i].enrollment * sizeof(TWrkr), SEEK_SET);
+        fseek(fa, index[i].status * sizeof(TWrkr), SEEK_SET);
         fread(&reg, sizeof(TWrkr), 1, fa);
         impriOne(reg);
         op = validar("\nDesea eliminarlo? 1. Si\n2. No  ", 1, 2);
         if (op == 1)
         {
             reg.status = 0;
-            fseek(fa, index[i].enrollment * sizeof(TWrkr), SEEK_SET);
+            fseek(fa, index[i].status * sizeof(TWrkr), SEEK_SET);
             fwrite(&reg, sizeof(TWrkr), 1, fa);
             printf("Se ha eliminado con exito\n");
         }
