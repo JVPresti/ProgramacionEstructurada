@@ -234,7 +234,7 @@ void buscarReg(Tindex index[], int alumnos, bool band)
     if (i != -1)
     {
         fa = fopen("datos.dat", "rb+");
-        fseek(fa, index[i].indice * sizeof(TWrkr), SEEK_SET);
+        fseek(fa, i * sizeof(TWrkr), SEEK_SET);
         fread(&reg, sizeof(TWrkr), 1, fa);
         impriOne(reg);
         fclose(fa);
